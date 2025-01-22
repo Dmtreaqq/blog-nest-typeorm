@@ -2,6 +2,7 @@ import { configDynamicModule } from './config-dynamic-module';
 import { DynamicModule, Module } from '@nestjs/common';
 import { CommonModule } from './common/common.module';
 import { CommonConfig } from './common/common.config';
+import { TestingModule } from './features/testing/testing.module';
 
 // TODO: ADD HUSKY WITH ESLINT !
 
@@ -48,10 +49,10 @@ export class AppModule {
   static async forRoot(commonConfig: CommonConfig): Promise<DynamicModule> {
     const additionalModules: any[] = [];
 
-    // if (commonConfig.includeTestingModule) {
-    //   console.log('Testing Module Included');
-    //   additionalModules.push(TestingModule);
-    // }
+    if (commonConfig.includeTestingModule) {
+      console.log('Testing Module Included');
+      additionalModules.push(TestingModule);
+    }
 
     return {
       module: AppModule,

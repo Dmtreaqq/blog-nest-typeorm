@@ -19,7 +19,7 @@ const {
 @Entity()
 export class UserMetaInfo {
   @PrimaryColumn()
-  userId: string;
+  userId?: string;
 
   @Column({ name: isConfirmed, type: 'boolean' })
   isConfirmed: boolean;

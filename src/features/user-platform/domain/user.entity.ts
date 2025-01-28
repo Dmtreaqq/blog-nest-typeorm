@@ -27,7 +27,7 @@ export class User {
   @Column({ type: 'varchar' })
   email: string;
 
-  @CreateDateColumn({ name: createdAt, type: 'timestamptz', default: 'now()' })
+  @CreateDateColumn({ name: createdAt, type: 'timestamptz' })
   createdAt: Date;
 
   @DeleteDateColumn({ name: deletedAt, type: 'timestamptz' })

@@ -2,7 +2,7 @@ import { Module } from '@nestjs/common';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { User } from './domain/user.entity';
 import { UserMetaInfo } from './domain/user-meta-info.entity';
-import { UsersController } from './users.controller';
+import { UsersController } from './api/users.controller';
 import { CreateUserUseCase } from './application/usecases/create-user.usecase';
 import { UsersRepository } from './repositories/users.repository';
 import { CryptoService } from './application/crypto.service';

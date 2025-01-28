@@ -12,6 +12,20 @@ export class UsersRepository {
     await this.usersRepository.save(user);
   }
 
+  async findByLoginOrEmail(login: string, email: string): Promise<User | null> {
+    const user = await this.usersRepository
+      .createQueryBuilder('u')
+      .where('u.login = :login', { login })
+      .orWhere('u.email = :email', { email })
+      .getOne();
+
+    if (!user) {
+      return null;
+    }
+
+    return user;
+  }
+
   async createUser(user: User) {
     const createdUser = await this.usersRepository.save(user);
 

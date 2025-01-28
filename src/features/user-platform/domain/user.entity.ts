@@ -3,16 +3,13 @@ import {
   CreateDateColumn,
   DeleteDateColumn,
   Entity,
-  JoinColumn,
   OneToOne,
   PrimaryGeneratedColumn,
 } from 'typeorm';
 import { userDict } from './dictionary/user.dict';
 import { UserMetaInfo } from './user-meta-info.entity';
 import { CreateUserDto } from '../dto/create-user.dto';
-import { CreateUserInputDto } from '../api/input-dto/create-user.input-dto';
 import { randomUUID } from 'node:crypto';
-
 const { createdAt, deletedAt } = userDict;
 
 @Entity()

@@ -11,17 +11,17 @@ import {
   UseGuards,
 } from '@nestjs/common';
 // import { UsersQueryRepository } from '../repositories/query/users.query-repository';
-import { UserViewDto } from './api/view-dto/users.view-dto';
+import { UserViewDto } from './view-dto/users.view-dto';
 // import { UsersService } from '../application/users.service';
-import { CreateUserInputDto } from './api/input-dto/create-user.input-dto';
-import { BasePaginationViewDto } from '../../common/dto/base-pagination.view-dto';
-import { GetUsersQueryParams } from './api/input-dto/get-users-query-params.input-dto';
-import { BasicAuthGuard } from '../../common/guards/basic-auth.guard';
-import { IdInputDto } from '../../common/dto/id.input-dto';
+import { CreateUserInputDto } from './input-dto/create-user.input-dto';
+import { BasePaginationViewDto } from '../../../common/dto/base-pagination.view-dto';
+import { GetUsersQueryParams } from './input-dto/get-users-query-params.input-dto';
+import { BasicAuthGuard } from '../../../common/guards/basic-auth.guard';
+import { IdInputDto } from '../../../common/dto/id.input-dto';
 import { CommandBus } from '@nestjs/cqrs';
-import { CreateUserCommand } from './application/usecases/create-user.usecase';
-import { UsersQueryRepository } from './repositories/query/user-query.repository';
-import { DeleteUserCommand } from './application/usecases/delete-user.usecase';
+import { CreateUserCommand } from '../application/usecases/create-user.usecase';
+import { UsersQueryRepository } from '../repositories/query/user-query.repository';
+import { DeleteUserCommand } from '../application/usecases/delete-user.usecase';
 
 @Controller('sa/users')
 export class UsersController {
@@ -41,8 +41,7 @@ export class UsersController {
   async getAll(
     @Query() query: GetUsersQueryParams,
   ): Promise<BasePaginationViewDto<UserViewDto[]>> {
-    // return this.usersQueryRepository.getAll(query);
-    return {} as any;
+    return this.usersQueryRepository.findAllUsers(query);
   }
 
   @UseGuards(BasicAuthGuard)

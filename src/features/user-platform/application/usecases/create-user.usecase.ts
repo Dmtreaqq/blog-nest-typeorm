@@ -1,13 +1,9 @@
-// import { CreateCommentDto } from '../../dto/create-comment.dto';
 import { CommandHandler, ICommandHandler } from '@nestjs/cqrs';
-// import { CommentsRepository } from '../../repositories/comments.repository';
-// import { PostsRepository } from '../../repositories/posts.repository';
-// import { NotFoundException, UnauthorizedException } from '@nestjs/common';
-import { UsersRepository } from '../../../user-platform/repositories/users.repository';
-import { CreateUserDto } from '../../dto/create-user.dto';
+import { UsersRepository } from '../../repositories/users.repository';
 import { User } from '../../domain/user.entity';
 import { CreateUserInputDto } from '../../api/input-dto/create-user.input-dto';
 import { CryptoService } from '../crypto.service';
+import { BadRequestException } from '@nestjs/common';
 
 export class CreateUserCommand {
   constructor(public dto: CreateUserInputDto) {}
@@ -23,16 +19,20 @@ export class CreateUserUseCase
   ) {}
 
   async execute(command: CreateUserCommand): Promise<string> {
-    // const isUserWithSameLoginOrEmailExist =
-    //   await this.usersRepository.findByLoginOrEmail(dto.login, dto.email);
-    // if (isUserWithSameLoginOrEmailExist) {
-    //   throw new BadRequestException([
-    //     {
-    //       message: 'User already exists',
-    //       field: 'email',
-    //     },
-    //   ]);
-    // }
+    const isUserWithSameLoginOrEmailExist =
+      await this.usersRepository.findByLoginOrEmail(
+        command.dto.login,
+        command.dto.email,
+      );
+
+    if (isUserWithSameLoginOrEmailExist) {
+      throw new BadRequestException([
+        {
+          message: 'User already exists',
+          field: 'email',
+        },
+      ]);
+    }
 
     const dto = command.dto;
 
@@ -51,31 +51,3 @@ export class CreateUserUseCase
     return userId;
   }
 }
-
-/**
- * const isUserWithSameLoginOrEmailExist =
- *       await this.usersRepository.findByLoginOrEmail(dto.login, dto.email);
- *     if (isUserWithSameLoginOrEmailExist) {
- *       throw new BadRequestException([
- *         {
- *           message: 'User already exists',
- *           field: 'email',
- *         },
- *       ]);
- *     }
- *
- *     const passwordHash = await this.cryptoService.createPasswordHash(
- *       dto.password,
- *     );
- *
- *     const values: CreateUserDto = {
- *       email: dto.email,
- *       login: dto.login,
- *       password: passwordHash,
- *       confirmationCode: '',
- *       recoveryCode: '',
- *       isConfirmed: true,
- *     };
- *
- *     return this.usersRepository.create(values);
- */

@@ -72,105 +72,104 @@ describe('Users Positive (e2e)', () => {
       .set('authorization', basicAuthHeader)
       .expect(HttpStatus.NOT_FOUND);
   });
-  //
-  // it('should GET users by searchEmailTerm successfully', async () => {
-  //   const [user1, user2] = await usersTestManager.createSeveralUsers(2);
-  //
-  //   const response1 = await request(app.getHttpServer())
-  //     .get(`${API_PREFIX}${API_PATH.USERS}/?searchEmailTerm=test`)
-  //     .set('authorization', basicAuthHeader)
-  //     .expect(HttpStatus.OK);
-  //
-  //   expect(response1.body.items.length).toEqual(2);
-  //   expect(response1.body.items).toEqual(
-  //     expect.arrayContaining([
-  //       expect.objectContaining({
-  //         ...user1,
-  //         id: expect.any(String),
-  //         createdAt: expect.any(String),
-  //       }),
-  //       expect.objectContaining({
-  //         ...user2,
-  //         id: expect.any(String),
-  //         createdAt: expect.any(String),
-  //       }),
-  //     ]),
-  //   );
-  // });
-  //
-  // it('should GET users by searchLoginTerm successfully', async () => {
-  //   const [user1] = await usersTestManager.createSeveralUsers(2);
-  //
-  //   const response1 = await request(app.getHttpServer())
-  //     .get(`${API_PREFIX}${API_PATH.USERS}/?searchLoginTerm=test0`)
-  //     .set('authorization', basicAuthHeader)
-  //     .expect(HttpStatus.OK);
-  //
-  //   expect(response1.body.items.length).toEqual(1);
-  //   expect(response1.body.items).toEqual(
-  //     expect.arrayContaining([
-  //       expect.objectContaining({
-  //         ...user1,
-  //         id: expect.any(String),
-  //         createdAt: expect.any(String),
-  //       }),
-  //     ]),
-  //   );
-  // });
-  //
-  // it('should GET users with pagination successfully', async () => {
-  //   await usersTestManager.createSeveralUsers(4);
-  //
-  //   const response1 = await request(app.getHttpServer())
-  //     .get(`${API_PREFIX}${API_PATH.USERS}/?pageNumber=2&pageSize=2`)
-  //     .set('authorization', basicAuthHeader)
-  //     .expect(HttpStatus.OK);
-  //   expect(response1.body).toEqual({
-  //     page: 2,
-  //     pageSize: 2,
-  //     totalCount: 4,
-  //     pagesCount: 2,
-  //     items: expect.any(Array),
-  //   });
-  // });
-  //
-  // it('should GET users with sorting successfully', async () => {
-  //   await usersTestManager.createSeveralUsers(4);
-  //
-  //   // Default sortDir = desc
-  //   const response1 = await request(app.getHttpServer())
-  //     .get(`${API_PREFIX}${API_PATH.USERS}/?sortBy=login`)
-  //     .set('authorization', basicAuthHeader)
-  //     .expect(HttpStatus.OK);
-  //   console.log(response1.body);
-  //   expect(response1.body.items[0].login).toEqual('test3');
-  //   expect(response1.body.items[3].login).toEqual('test0');
-  // });
-  //
-  // it('should GET users with sorting (asc) successfully', async () => {
-  //   await usersTestManager.createSeveralUsers(4);
-  //
-  //   const response1 = await request(app.getHttpServer())
-  //     .get(`${API_PREFIX}${API_PATH.USERS}/?sortBy=login&sortDirection=asc`)
-  //     .set('authorization', basicAuthHeader)
-  //     .expect(HttpStatus.OK);
-  //   expect(response1.body.items[0].login).toEqual('test0');
-  //   expect(response1.body.items[3].login).toEqual('test3');
-  // });
-  //
-  // it('should GET users with all query parameters used', async () => {
-  //   await usersTestManager.createSeveralUsers(4);
-  //
-  //   const response1 = await request(app.getHttpServer())
-  //     .get(
-  //       `${API_PREFIX}${API_PATH.USERS}/?sortBy=login&sortDirection=asc&searchEmailTerm=test&searchLoginTerm=test`,
-  //     )
-  //     .set('authorization', basicAuthHeader)
-  //     .expect(HttpStatus.OK);
-  //   expect(response1.body.items.length).toEqual(4);
-  //   expect(response1.body.items[0].login).toEqual('test0');
-  //   expect(response1.body.items[1].login).toEqual('test1');
-  //   expect(response1.body.items[2].login).toEqual('test2');
-  //   expect(response1.body.items[3].login).toEqual('test3');
-  // });
+
+  it('should GET users by searchEmailTerm successfully', async () => {
+    const [user1, user2] = await usersTestManager.createSeveralUsers(2);
+
+    const response1 = await request(app.getHttpServer())
+      .get(`${API_PREFIX}${API_PATH.USERS}/?searchEmailTerm=test`)
+      .set('authorization', basicAuthHeader)
+      .expect(HttpStatus.OK);
+
+    expect(response1.body.items.length).toEqual(2);
+    expect(response1.body.items).toEqual(
+      expect.arrayContaining([
+        expect.objectContaining({
+          ...user1,
+          id: expect.any(String),
+          createdAt: expect.any(String),
+        }),
+        expect.objectContaining({
+          ...user2,
+          id: expect.any(String),
+          createdAt: expect.any(String),
+        }),
+      ]),
+    );
+  });
+
+  it('should GET users by searchLoginTerm successfully', async () => {
+    const [user1] = await usersTestManager.createSeveralUsers(2);
+
+    const response1 = await request(app.getHttpServer())
+      .get(`${API_PREFIX}${API_PATH.USERS}/?searchLoginTerm=test0`)
+      .set('authorization', basicAuthHeader)
+      .expect(HttpStatus.OK);
+
+    expect(response1.body.items.length).toEqual(1);
+    expect(response1.body.items).toEqual(
+      expect.arrayContaining([
+        expect.objectContaining({
+          ...user1,
+          id: expect.any(String),
+          createdAt: expect.any(String),
+        }),
+      ]),
+    );
+  });
+
+  it('should GET users with pagination successfully', async () => {
+    await usersTestManager.createSeveralUsers(4);
+
+    const response1 = await request(app.getHttpServer())
+      .get(`${API_PREFIX}${API_PATH.USERS}/?pageNumber=2&pageSize=2`)
+      .set('authorization', basicAuthHeader)
+      .expect(HttpStatus.OK);
+    expect(response1.body).toEqual({
+      page: 2,
+      pageSize: 2,
+      totalCount: 4,
+      pagesCount: 2,
+      items: expect.any(Array),
+    });
+  });
+
+  it('should GET users with sorting successfully', async () => {
+    await usersTestManager.createSeveralUsers(4);
+
+    // Default sortDir = desc
+    const response1 = await request(app.getHttpServer())
+      .get(`${API_PREFIX}${API_PATH.USERS}/?sortBy=login`)
+      .set('authorization', basicAuthHeader)
+      .expect(HttpStatus.OK);
+    expect(response1.body.items[0].login).toEqual('test3');
+    expect(response1.body.items[3].login).toEqual('test0');
+  });
+
+  it('should GET users with sorting (asc) successfully', async () => {
+    await usersTestManager.createSeveralUsers(4);
+
+    const response1 = await request(app.getHttpServer())
+      .get(`${API_PREFIX}${API_PATH.USERS}/?sortBy=login&sortDirection=asc`)
+      .set('authorization', basicAuthHeader)
+      .expect(HttpStatus.OK);
+    expect(response1.body.items[0].login).toEqual('test0');
+    expect(response1.body.items[3].login).toEqual('test3');
+  });
+
+  it('should GET users with all query parameters used', async () => {
+    await usersTestManager.createSeveralUsers(4);
+
+    const response1 = await request(app.getHttpServer())
+      .get(
+        `${API_PREFIX}${API_PATH.USERS}/?sortBy=login&sortDirection=asc&searchEmailTerm=test&searchLoginTerm=test`,
+      )
+      .set('authorization', basicAuthHeader)
+      .expect(HttpStatus.OK);
+    expect(response1.body.items.length).toEqual(4);
+    expect(response1.body.items[0].login).toEqual('test0');
+    expect(response1.body.items[1].login).toEqual('test1');
+    expect(response1.body.items[2].login).toEqual('test2');
+    expect(response1.body.items[3].login).toEqual('test3');
+  });
 });

@@ -7,6 +7,7 @@ export class JwtOptionalAuthGuard extends AuthGuard('jwt') {
     return super.canActivate(context);
   }
 
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
   handleRequest(err, user, info) {
     // TODO: FIX OPTIONAL AUTH GUARD
     return user;

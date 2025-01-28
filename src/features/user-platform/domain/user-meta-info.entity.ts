@@ -38,7 +38,7 @@ export class UserMetaInfo {
   })
   recoveryCodeExpirationDate: string;
 
-  @OneToOne(() => User)
+  @OneToOne(() => User, (user) => user.userMetaInfo)
   @JoinColumn()
   user: User;
 }

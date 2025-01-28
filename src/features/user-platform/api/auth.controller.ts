@@ -20,6 +20,8 @@ import { LoginUserCommand } from '../application/usecases/login-user.usecase';
 import { RegistrationUserDto } from './input-dto/registration-user.dto';
 import { CryptoService } from '../application/crypto.service';
 import { RegisterUserCommand } from '../application/usecases/register-user.usecase';
+import { ConfirmationCodeDto } from './input-dto/confirmation-code.dto';
+import { ConfirmUserCommand } from '../application/usecases/confirm-user.usecase';
 
 @Controller('auth')
 export class AuthController {
@@ -59,5 +61,11 @@ export class AuthController {
     await this.commandBus.execute(new RegisterUserCommand(dto));
 
     // MAYBE DO HERE SENDING EMAIL ??
+  }
+
+  @HttpCode(HttpStatus.NO_CONTENT)
+  @Post('registration-confirmation')
+  async confirmRegistration(@Body() dto: ConfirmationCodeDto) {
+    await this.commandBus.execute(new ConfirmUserCommand(dto.code));
   }
 }

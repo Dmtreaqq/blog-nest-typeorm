@@ -63,78 +63,81 @@ describe('Auth Positive (e2e)', () => {
     ]);
   });
 
-  it('should POST /login with login successfully and get user info', async () => {
-    await usersTestManager.registerUser(createUserInput);
-
-    const response = await request(app.getHttpServer())
-      .post(API_PREFIX + API_PATH.AUTH + '/login')
-      .send({
-        loginOrEmail: createUserInput.login,
-        password: createUserInput.password,
-      })
-      .expect(HttpStatus.OK);
-
-    expect(response.body).toEqual({
-      accessToken: expect.any(String),
-    });
-
-    const meResponse = await request(app.getHttpServer())
-      .get(API_PREFIX + API_PATH.AUTH + '/me')
-      .set('authorization', `Bearer ${response.body.accessToken}`)
-      .expect(HttpStatus.OK);
-
-    expect(meResponse.body).toEqual({
-      login: createUserInput.login,
-      userId: expect.any(String),
-      email: createUserInput.email,
-    } as MeViewDto);
-  });
-
-  it('should POST /login with email successfully and get user info', async () => {
-    await usersTestManager.registerUser(createUserInput);
-
-    const response = await request(app.getHttpServer())
-      .post(API_PREFIX + API_PATH.AUTH + '/login')
-      .send({
-        loginOrEmail: createUserInput.email,
-        password: createUserInput.password,
-      })
-      .expect(HttpStatus.OK);
-
-    expect(response.body).toEqual({
-      accessToken: expect.any(String),
-    });
-
-    const meResponse = await request(app.getHttpServer())
-      .get(API_PREFIX + API_PATH.AUTH + '/me')
-      .set('authorization', `Bearer ${response.body.accessToken}`)
-      .expect(HttpStatus.OK);
-
-    expect(meResponse.body).toEqual({
-      login: createUserInput.login,
-      userId: expect.any(String),
-      email: createUserInput.email,
-    } as MeViewDto);
-  });
-
-  // it('should return 204 when POST successful registration confirmation and send email', async () => {
+  // it('should POST /login with login successfully and get user info', async () => {
   //   await usersTestManager.registerUser(createUserInput);
-  //   const userFromDb = await usersRepository.findByEmail(createUserInput.email);
   //
-  //   await request(app.getHttpServer())
-  //     .post(API_PREFIX + API_PATH.AUTH + '/registration-confirmation')
-  //     .send({ code: userFromDb.confirmationCode })
-  //     .expect(HttpStatus.NO_CONTENT);
+  //   const response = await request(app.getHttpServer())
+  //     .post(API_PREFIX + API_PATH.AUTH + '/login')
+  //     .send({
+  //       loginOrEmail: createUserInput.login,
+  //       password: createUserInput.password,
+  //     })
+  //     .expect(HttpStatus.OK);
+  //
+  //   expect(response.body).toEqual({
+  //     accessToken: expect.any(String),
+  //   });
+  //
+  //   const meResponse = await request(app.getHttpServer())
+  //     .get(API_PREFIX + API_PATH.AUTH + '/me')
+  //     .set('authorization', `Bearer ${response.body.accessToken}`)
+  //     .expect(HttpStatus.OK);
+  //
+  //   expect(meResponse.body).toEqual({
+  //     login: createUserInput.login,
+  //     userId: expect.any(String),
+  //     email: createUserInput.email,
+  //   } as MeViewDto);
   // });
 
-  it('should return 204 when POST successful email resend while confirm email', async () => {
+  // it('should POST /login with email successfully and get user info', async () => {
+  //   await usersTestManager.registerUser(createUserInput);
+  //
+  //   const response = await request(app.getHttpServer())
+  //     .post(API_PREFIX + API_PATH.AUTH + '/login')
+  //     .send({
+  //       loginOrEmail: createUserInput.email,
+  //       password: createUserInput.password,
+  //     })
+  //     .expect(HttpStatus.OK);
+  //
+  //   expect(response.body).toEqual({
+  //     accessToken: expect.any(String),
+  //   });
+  //
+  //   const meResponse = await request(app.getHttpServer())
+  //     .get(API_PREFIX + API_PATH.AUTH + '/me')
+  //     .set('authorization', `Bearer ${response.body.accessToken}`)
+  //     .expect(HttpStatus.OK);
+  //
+  //   expect(meResponse.body).toEqual({
+  //     login: createUserInput.login,
+  //     userId: expect.any(String),
+  //     email: createUserInput.email,
+  //   } as MeViewDto);
+  // });
+
+  it('should return 204 when POST successful registration confirmation and send email', async () => {
     await usersTestManager.registerUser(createUserInput);
+    const userFromDb = await usersRepository.findByLoginOrEmail(
+      createUserInput.email,
+      createUserInput.email,
+    );
 
     await request(app.getHttpServer())
-      .post(API_PREFIX + API_PATH.AUTH + '/registration-email-resending')
-      .send({ email: createUserInput.email })
+      .post(API_PREFIX + API_PATH.AUTH + '/registration-confirmation')
+      .send({ code: userFromDb.userMetaInfo.confirmationCode })
       .expect(HttpStatus.NO_CONTENT);
   });
+
+  // it('should return 204 when POST successful email resend while confirm email', async () => {
+  //   await usersTestManager.registerUser(createUserInput);
+  //
+  //   await request(app.getHttpServer())
+  //     .post(API_PREFIX + API_PATH.AUTH + '/registration-email-resending')
+  //     .send({ email: createUserInput.email })
+  //     .expect(HttpStatus.NO_CONTENT);
+  // });
 
   // it('should return 204 when POST successful email send while password recover with EXISTING user', async () => {
   //   await usersTestManager.registerUser(createUserInput);

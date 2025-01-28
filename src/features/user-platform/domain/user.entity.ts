@@ -33,7 +33,7 @@ export class User {
   @DeleteDateColumn({ name: deletedAt, type: 'timestamptz' })
   deletedAt: Date;
 
-  @OneToOne(() => UserMetaInfo, {
+  @OneToOne(() => UserMetaInfo, (userMetaInfo) => userMetaInfo.user, {
     cascade: true,
   })
   userMetaInfo: UserMetaInfo;
@@ -67,5 +67,9 @@ export class User {
     }
 
     this.deletedAt = new Date();
+  }
+
+  markConfirmed() {
+    this.userMetaInfo.isConfirmed = true;
   }
 }

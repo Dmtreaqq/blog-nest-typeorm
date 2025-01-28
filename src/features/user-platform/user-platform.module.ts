@@ -16,12 +16,14 @@ import { UserPlatformConfig } from './config/user-platform.config';
 import { LocalStrategy } from './api/guards/local.strategy';
 import { CommunicationModule } from '../communication/communication.module';
 import { RegisterUserUseCase } from './application/usecases/register-user.usecase';
+import { ConfirmUserUseCase } from './application/usecases/confirm-user.usecase';
 
 const useCases = [
   CreateUserUseCase,
   DeleteUserUseCase,
   LoginUserUseCase,
   RegisterUserUseCase,
+  ConfirmUserUseCase,
 ];
 
 @Module({

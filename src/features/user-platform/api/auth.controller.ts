@@ -27,6 +27,8 @@ import { JwtAuthGuard } from '../../../common/guards/jwt-auth.guard';
 import { MeViewDto } from './view-dto/users.view-dto';
 import { UsersQueryRepository } from '../repositories/query/user-query.repository';
 import { RecoverUserPasswordCommand } from '../application/usecases/recover-password.usecase';
+import { ConfirmNewPasswordDto } from './input-dto/confirm-new-password.dto';
+import { ConfirmPasswordCommand } from '../application/usecases/confirm-password.usecase';
 
 @Controller('auth')
 export class AuthController {
@@ -90,6 +92,12 @@ export class AuthController {
   @Post('password-recovery')
   async recoverPassword(@Body() dto: EmailDto) {
     await this.commandBus.execute(new RecoverUserPasswordCommand(dto.email));
+  }
+
+  @HttpCode(HttpStatus.NO_CONTENT)
+  @Post('new-password')
+  async confirmNewPassword(@Body() dto: ConfirmNewPasswordDto) {
+    await this.commandBus.execute(new ConfirmPasswordCommand(dto));
   }
 
   @UseGuards(JwtAuthGuard)

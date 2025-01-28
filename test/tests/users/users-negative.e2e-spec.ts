@@ -1,13 +1,13 @@
 import { HttpStatus, INestApplication } from '@nestjs/common';
 import * as request from 'supertest';
-import { API_PREFIX } from '../../src/setup/global-prefix.setup';
-import { API_PATH } from '../../src/common/constants';
+import { API_PREFIX } from '../../../src/setup/global-prefix.setup';
+import { API_PATH } from '../../../src/common/constants';
 import {
   basicAuthHeader,
   UsersTestManager,
-} from '../helpers/users-test-manager';
-import { createUserInput } from '../helpers/inputs';
-import { initSettings } from '../helpers/init-settings';
+} from '../../helpers/users-test-manager';
+import { createUserInput } from '../../helpers/inputs';
+import { initSettings } from '../../helpers/init-settings';
 import { randomUUID } from 'node:crypto';
 
 describe('Users Negative (e2e)', () => {

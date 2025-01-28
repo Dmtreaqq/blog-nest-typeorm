@@ -1,10 +1,10 @@
 import { HttpStatus, INestApplication } from '@nestjs/common';
 import * as request from 'supertest';
-import { API_PREFIX } from '../../src/setup/global-prefix.setup';
-import { API_PATH } from '../../src/common/constants';
-import { UsersTestManager } from '../helpers/users-test-manager';
-import { createUserInput, basicAuthHeader } from '../helpers/inputs';
-import { initSettings } from '../helpers/init-settings';
+import { API_PREFIX } from '../../../src/setup/global-prefix.setup';
+import { API_PATH } from '../../../src/common/constants';
+import { UsersTestManager } from '../../helpers/users-test-manager';
+import { createUserInput, basicAuthHeader } from '../../helpers/inputs';
+import { initSettings } from '../../helpers/init-settings';
 
 describe('Users Positive (e2e)', () => {
   let app: INestApplication;

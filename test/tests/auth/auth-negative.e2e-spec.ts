@@ -1,17 +1,15 @@
 import { HttpStatus, INestApplication } from '@nestjs/common';
-import { MongoMemoryServer } from 'mongodb-memory-server';
 import * as request from 'supertest';
-import { API_PREFIX } from '../../../../src/settings/global-prefix.setup';
-import { API_PATH } from '../../../../src/common/constants';
-import { UsersTestManager } from '../../../helpers/users-test-manager';
-import { createUserInput } from '../../../helpers/inputs';
-import { UsersRepository } from '../../../../src/features/user-platform/repositories/users.repository';
+import { API_PREFIX } from '../../../src/setup/global-prefix.setup';
+import { API_PATH } from '../../../src/common/constants';
+import { UsersTestManager } from '../../helpers/users-test-manager';
+import { createUserInput } from '../../helpers/inputs';
+import { UsersRepository } from '../../../src/features/user-platform/repositories/users.repository';
 import { sub } from 'date-fns/sub';
-import { initSettings } from '../../../helpers/init-settings';
+import { initSettings } from '../../helpers/init-settings';
 
 describe('Auth Negative (e2e)', () => {
   let app: INestApplication;
-  let mongoServer: MongoMemoryServer;
   let usersTestManager: UsersTestManager;
   let usersRepository: UsersRepository;
 
@@ -27,7 +25,6 @@ describe('Auth Negative (e2e)', () => {
 
   afterAll(async () => {
     await app.close();
-    await mongoServer.stop();
   });
 
   beforeEach(async () => {
@@ -152,18 +149,19 @@ describe('Auth Negative (e2e)', () => {
 
   it('should return 400 when POST registration confirmation with already confirmed user', async () => {
     await usersTestManager.registerUser(createUserInput);
-    const registeredUser = await usersRepository.findByEmail(
+    const registeredUser = await usersRepository.findByLoginOrEmail(
+      createUserInput.email,
       createUserInput.email,
     );
 
     await request(app.getHttpServer())
       .post(API_PREFIX + API_PATH.AUTH + '/registration-confirmation')
-      .send({ code: registeredUser!.confirmationCode })
+      .send({ code: registeredUser!.userMetaInfo.confirmationCode })
       .expect(HttpStatus.NO_CONTENT);
 
     const response = await request(app.getHttpServer())
       .post(API_PREFIX + API_PATH.AUTH + '/registration-confirmation')
-      .send({ code: registeredUser!.confirmationCode })
+      .send({ code: registeredUser!.userMetaInfo.confirmationCode })
       .expect(HttpStatus.BAD_REQUEST);
 
     expect(response.body).toEqual({
@@ -178,19 +176,21 @@ describe('Auth Negative (e2e)', () => {
 
   it('should return 400 when POST registration confirmation when code is expired', async () => {
     await usersTestManager.registerUser(createUserInput);
-    const user = await usersRepository.findByEmail(createUserInput.email);
+    const user = await usersRepository.findByLoginOrEmail(
+      createUserInput.email,
+      createUserInput.email,
+    );
+
     const confirmDate = sub(new Date(), {
       minutes: 4,
     }).toISOString();
-    await usersRepository.updateConfirmationCode(
-      user.id,
-      user.confirmationCode,
-      confirmDate,
-    );
+
+    user.userMetaInfo.confirmationCodeExpirationDate = confirmDate;
+    await usersRepository.save(user);
 
     const response = await request(app.getHttpServer())
       .post(API_PREFIX + API_PATH.AUTH + '/registration-confirmation')
-      .send({ code: user.confirmationCode })
+      .send({ code: user.userMetaInfo.confirmationCode })
       .expect(HttpStatus.BAD_REQUEST);
 
     expect(response.body).toEqual({
@@ -241,13 +241,14 @@ describe('Auth Negative (e2e)', () => {
 
   it('should return 400 when POST email resend with already confirmed user', async () => {
     await usersTestManager.registerUser(createUserInput);
-    const registeredUser = await usersRepository.findByEmail(
+    const registeredUser = await usersRepository.findByLoginOrEmail(
+      createUserInput.email,
       createUserInput.email,
     );
 
     await request(app.getHttpServer())
       .post(API_PREFIX + API_PATH.AUTH + '/registration-confirmation')
-      .send({ code: registeredUser!.confirmationCode })
+      .send({ code: registeredUser!.userMetaInfo.confirmationCode })
       .expect(HttpStatus.NO_CONTENT);
 
     const response = await request(app.getHttpServer())

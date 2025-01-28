@@ -86,4 +86,8 @@ export class User {
       minutes: 3,
     }).toISOString();
   }
+
+  updatePassword(passwordHash: string) {
+    this.password = passwordHash;
+  }
 }

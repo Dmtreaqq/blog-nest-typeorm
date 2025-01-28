@@ -18,6 +18,7 @@ import { CommunicationModule } from '../communication/communication.module';
 import { RegisterUserUseCase } from './application/usecases/register-user.usecase';
 import { ConfirmUserUseCase } from './application/usecases/confirm-user.usecase';
 import { RecoverUserPasswordUseCase } from './application/usecases/recover-password.usecase';
+import { ConfirmPasswordUseCase } from './application/usecases/confirm-password.usecase';
 
 const useCases = [
   CreateUserUseCase,
@@ -26,6 +27,7 @@ const useCases = [
   RegisterUserUseCase,
   ConfirmUserUseCase,
   RecoverUserPasswordUseCase,
+  ConfirmPasswordUseCase,
 ];
 
 @Module({

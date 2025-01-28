@@ -45,6 +45,23 @@ export class UsersRepository {
     return user;
   }
 
+  async findByRecoveryCode(code: string): Promise<User | null> {
+    const user = await this.usersRepository.findOne({
+      where: {
+        userMetaInfo: {
+          recoveryCode: code,
+        },
+      },
+      relations: ['userMetaInfo'],
+    });
+
+    if (!user) {
+      return null;
+    }
+
+    return user;
+  }
+
   async createUser(user: User) {
     const createdUser = await this.usersRepository.save(user);
 

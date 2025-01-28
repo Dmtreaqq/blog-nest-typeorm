@@ -7,7 +7,7 @@ import {
 import { AuthGuard } from '@nestjs/passport';
 import { plainToClass } from 'class-transformer';
 import { validate } from 'class-validator';
-import { LoginUserDto } from '../input-dto/login-user.dto';
+import { LoginInputUserDto } from '../input-dto/login-input-user.dto';
 
 @Injectable()
 export class LocalAuthGuard extends AuthGuard('local') {
@@ -16,7 +16,7 @@ export class LocalAuthGuard extends AuthGuard('local') {
     // const response = context.switchToHttp().getResponse<Response>();
 
     // transform the request object to class instance
-    const body = plainToClass(LoginUserDto, request.body);
+    const body = plainToClass(LoginInputUserDto, request.body);
 
     // get a list of errors
     const errors = await validate(body);

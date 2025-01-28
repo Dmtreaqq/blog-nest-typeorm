@@ -12,7 +12,7 @@ export class UsersQueryRepository {
     @InjectRepository(User) private userRepository: Repository<User>,
   ) {}
 
-  async findUserById(id: string): Promise<UserViewDto> {
+  async findUserByIdOrThrow(id: string): Promise<UserViewDto> {
     const user = await this.userRepository.findOne({
       where: {
         id,

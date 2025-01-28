@@ -33,7 +33,7 @@ export class UsersController {
   @UseGuards(BasicAuthGuard)
   @Get(':id')
   async getById(@Param() params: IdInputDto): Promise<UserViewDto> {
-    return this.usersQueryRepository.findUserById(params.id);
+    return this.usersQueryRepository.findUserByIdOrThrow(params.id);
   }
 
   @UseGuards(BasicAuthGuard)
@@ -49,7 +49,7 @@ export class UsersController {
   async createUser(@Body() body: CreateUserInputDto): Promise<UserViewDto> {
     const userId = await this.commandBus.execute(new CreateUserCommand(body));
 
-    return this.usersQueryRepository.findUserById(userId);
+    return this.usersQueryRepository.findUserByIdOrThrow(userId);
   }
 
   // TODO: DELETE ALL USER SESSIONS

@@ -1,7 +1,7 @@
 import {
-  BadRequestException,
   Body,
   Controller,
+  Get,
   HttpCode,
   HttpStatus,
   Ip,
@@ -18,14 +18,22 @@ import { UserContext } from '../../../common/dto/user-context.dto';
 import { CommandBus } from '@nestjs/cqrs';
 import { LoginUserCommand } from '../application/usecases/login-user.usecase';
 import { RegistrationUserDto } from './input-dto/registration-user.dto';
-import { CryptoService } from '../application/crypto.service';
 import { RegisterUserCommand } from '../application/usecases/register-user.usecase';
 import { ConfirmationCodeDto } from './input-dto/confirmation-code.dto';
 import { ConfirmUserCommand } from '../application/usecases/confirm-user.usecase';
+import { EmailDto } from './input-dto/email.dto';
+import { AuthService } from '../application/auth.service';
+import { JwtAuthGuard } from '../../../common/guards/jwt-auth.guard';
+import { MeViewDto } from './view-dto/users.view-dto';
+import { UsersQueryRepository } from '../repositories/query/user-query.repository';
 
 @Controller('auth')
 export class AuthController {
-  constructor(private commandBus: CommandBus) {}
+  constructor(
+    private commandBus: CommandBus,
+    private authService: AuthService,
+    private usersQueryRepository: UsersQueryRepository,
+  ) {}
 
   @UseGuards(LocalAuthGuard)
   @HttpCode(HttpStatus.OK)
@@ -67,5 +75,23 @@ export class AuthController {
   @Post('registration-confirmation')
   async confirmRegistration(@Body() dto: ConfirmationCodeDto) {
     await this.commandBus.execute(new ConfirmUserCommand(dto.code));
+  }
+
+  @HttpCode(HttpStatus.NO_CONTENT)
+  @Post('registration-email-resending')
+  async resendConfirmRegistration(@Body() dto: EmailDto) {
+    await this.authService.resendConfirmRegistration(dto);
+
+    // TODO: RESEND EMAIL HERE ?
+  }
+
+  @UseGuards(JwtAuthGuard)
+  @Get('me')
+  async getMe(@GetUser() userContext: UserContext): Promise<MeViewDto> {
+    const user = await this.usersQueryRepository.findUserByIdOrThrow(
+      userContext.id,
+    );
+
+    return MeViewDto.mapToView(user as any);
   }
 }

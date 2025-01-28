@@ -72,4 +72,18 @@ export class User {
   markConfirmed() {
     this.userMetaInfo.isConfirmed = true;
   }
+
+  updateConfirmationData() {
+    this.userMetaInfo.confirmationCode = randomUUID();
+    this.userMetaInfo.confirmationCodeExpirationDate = add(new Date(), {
+      minutes: 3,
+    }).toISOString();
+  }
+
+  updateRecoveryData() {
+    this.userMetaInfo.recoveryCode = randomUUID();
+    this.userMetaInfo.recoveryCodeExpirationDate = add(new Date(), {
+      minutes: 3,
+    }).toISOString();
+  }
 }

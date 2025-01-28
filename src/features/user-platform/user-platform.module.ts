@@ -14,12 +14,20 @@ import { AuthService } from './application/auth.service';
 import { JwtModule } from '@nestjs/jwt';
 import { UserPlatformConfig } from './config/user-platform.config';
 import { LocalStrategy } from './api/guards/local.strategy';
+import { CommunicationModule } from '../communication/communication.module';
+import { RegisterUserUseCase } from './application/usecases/register-user.usecase';
 
-const useCases = [CreateUserUseCase, DeleteUserUseCase, LoginUserUseCase];
+const useCases = [
+  CreateUserUseCase,
+  DeleteUserUseCase,
+  LoginUserUseCase,
+  RegisterUserUseCase,
+];
 
 @Module({
   controllers: [UsersController, AuthController],
   imports: [
+    CommunicationModule,
     JwtModule.register({}),
     TypeOrmModule.forFeature([User, UserMetaInfo]),
   ],

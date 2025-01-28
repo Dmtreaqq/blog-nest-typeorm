@@ -1,4 +1,6 @@
 import {
+  BadRequestException,
+  Body,
   Controller,
   HttpCode,
   HttpStatus,
@@ -15,6 +17,9 @@ import { GetUser } from '../../../common/decorators/get-user.decorator';
 import { UserContext } from '../../../common/dto/user-context.dto';
 import { CommandBus } from '@nestjs/cqrs';
 import { LoginUserCommand } from '../application/usecases/login-user.usecase';
+import { RegistrationUserDto } from './input-dto/registration-user.dto';
+import { CryptoService } from '../application/crypto.service';
+import { RegisterUserCommand } from '../application/usecases/register-user.usecase';
 
 @Controller('auth')
 export class AuthController {
@@ -46,5 +51,13 @@ export class AuthController {
     return {
       accessToken: loginResult.accessToken,
     };
+  }
+
+  @HttpCode(HttpStatus.NO_CONTENT)
+  @Post('registration')
+  async registration(@Body() dto: RegistrationUserDto) {
+    await this.commandBus.execute(new RegisterUserCommand(dto));
+
+    // MAYBE DO HERE SENDING EMAIL ??
   }
 }

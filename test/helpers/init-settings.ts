@@ -6,6 +6,8 @@ import { NestFactory } from '@nestjs/core';
 import { AppModule } from '../../src/app.module';
 import { UsersTestManager } from './users-test-manager';
 import * as cookieParser from 'cookie-parser';
+import { EmailService } from '../../src/features/communication/email.service';
+import { EmailServiceMock } from '../mock/email-service.mock';
 
 export const initSettings = async (
   //передаем callback, который получает ModuleBuilder, если хотим изменить настройку тестового модуля
@@ -17,9 +19,9 @@ export const initSettings = async (
   const dynamicAppModule = await AppModule.forRoot(commonConfig);
   const testingModuleBuilder: TestingModuleBuilder = Test.createTestingModule({
     imports: [dynamicAppModule],
-  });
-  // .overrideProvider(EmailService)
-  // .useClass(EmailServiceMock);
+  })
+    .overrideProvider(EmailService)
+    .useClass(EmailServiceMock);
 
   if (addSettingsToModuleBuilder) {
     addSettingsToModuleBuilder(testingModuleBuilder);

@@ -10,6 +10,7 @@ import { userDict } from './dictionary/user.dict';
 import { UserMetaInfo } from './user-meta-info.entity';
 import { CreateUserDto } from '../dto/create-user.dto';
 import { randomUUID } from 'node:crypto';
+import { add } from 'date-fns/add';
 const { createdAt, deletedAt } = userDict;
 
 @Entity()
@@ -45,12 +46,16 @@ export class User {
     user.email = dto.email;
 
     user.userMetaInfo = {
-      confirmationCode: randomUUID(),
-      confirmationCodeExpirationDate: new Date().toISOString(),
-      recoveryCode: randomUUID(),
-      recoveryCodeExpirationDate: new Date().toISOString(),
-      isConfirmed: dto.isConfirmed,
       user: user,
+      isConfirmed: dto.isConfirmed,
+      confirmationCode: randomUUID(),
+      confirmationCodeExpirationDate: add(new Date(), {
+        minutes: 3,
+      }).toISOString(),
+      recoveryCode: randomUUID(),
+      recoveryCodeExpirationDate: add(new Date(), {
+        minutes: 3,
+      }).toISOString(),
     };
 
     return user;

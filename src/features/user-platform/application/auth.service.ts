@@ -65,6 +65,8 @@ export class AuthService {
 
     user.updateConfirmationData();
 
+    await this.usersRepository.save(user);
+
     this.emailService
       .sendConfirmationEmail(user.userMetaInfo.confirmationCode, dto.email)
       .catch((e) => console.log(e));

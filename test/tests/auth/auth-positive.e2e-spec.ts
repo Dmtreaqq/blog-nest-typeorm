@@ -139,15 +139,18 @@ describe('Auth Positive (e2e)', () => {
       .expect(HttpStatus.NO_CONTENT);
   });
 
-  // it('should return 204 when POST successful email send while password recover with EXISTING user', async () => {
-  //   await usersTestManager.registerUser(createUserInput);
-  //   const userFromDb = await usersRepository.findByEmail(createUserInput.email);
-  //
-  //   await request(app.getHttpServer())
-  //     .post(API_PREFIX + API_PATH.AUTH + '/password-recovery')
-  //     .send({ email: userFromDb.email })
-  //     .expect(HttpStatus.NO_CONTENT);
-  // });
+  it('should return 204 when POST successful email send while password recover with EXISTING user', async () => {
+    await usersTestManager.registerUser(createUserInput);
+    const userFromDb = await usersRepository.findByLoginOrEmail(
+      createUserInput.email,
+      createUserInput.email,
+    );
+
+    await request(app.getHttpServer())
+      .post(API_PREFIX + API_PATH.AUTH + '/password-recovery')
+      .send({ email: userFromDb.email })
+      .expect(HttpStatus.NO_CONTENT);
+  });
 
   // it('should return 204 when POST successful new password confirmation', async () => {
   //   await usersTestManager.registerUser(createUserInput);

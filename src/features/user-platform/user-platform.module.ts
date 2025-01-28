@@ -17,6 +17,7 @@ import { LocalStrategy } from './api/guards/local.strategy';
 import { CommunicationModule } from '../communication/communication.module';
 import { RegisterUserUseCase } from './application/usecases/register-user.usecase';
 import { ConfirmUserUseCase } from './application/usecases/confirm-user.usecase';
+import { RecoverUserPasswordUseCase } from './application/usecases/recover-password.usecase';
 
 const useCases = [
   CreateUserUseCase,
@@ -24,6 +25,7 @@ const useCases = [
   LoginUserUseCase,
   RegisterUserUseCase,
   ConfirmUserUseCase,
+  RecoverUserPasswordUseCase,
 ];
 
 @Module({

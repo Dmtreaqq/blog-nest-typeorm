@@ -26,6 +26,7 @@ import { AuthService } from '../application/auth.service';
 import { JwtAuthGuard } from '../../../common/guards/jwt-auth.guard';
 import { MeViewDto } from './view-dto/users.view-dto';
 import { UsersQueryRepository } from '../repositories/query/user-query.repository';
+import { RecoverUserPasswordCommand } from '../application/usecases/recover-password.usecase';
 
 @Controller('auth')
 export class AuthController {
@@ -83,6 +84,12 @@ export class AuthController {
     await this.authService.resendConfirmRegistration(dto);
 
     // TODO: RESEND EMAIL HERE ?
+  }
+
+  @HttpCode(HttpStatus.NO_CONTENT)
+  @Post('password-recovery')
+  async recoverPassword(@Body() dto: EmailDto) {
+    await this.commandBus.execute(new RecoverUserPasswordCommand(dto.email));
   }
 
   @UseGuards(JwtAuthGuard)

@@ -15,6 +15,7 @@ export class UserDeviceSessionQueryRepository {
     const sessions = await this.sessionsRepository
       .createQueryBuilder('s')
       .where('s.userId = :userId', { userId })
+      .orderBy('s.created_at', 'ASC')
       .getMany();
 
     return sessions.map(UserDeviceSessionsViewDto.mapToView);

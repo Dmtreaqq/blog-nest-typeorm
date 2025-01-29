@@ -26,6 +26,9 @@ import { UserDeviceSessionQueryRepository } from './repositories/query/user-devi
 import { SecurityDevicesController } from './api/security-devices.controller';
 import { DeleteSessionUseCase } from './application/usecases/delete-session.usecase';
 import { DeleteSessionExceptUseCase } from './application/usecases/delete-session-except.usecase';
+import { RefreshTokenUseCase } from './application/usecases/refresh-token.usecase';
+import { UpdateSessionUseCase } from './application/usecases/update-session.usecase';
+import { LogoutUserUseCase } from './application/usecases/logout-user.usecase';
 
 const useCases = [
   CreateUserUseCase,
@@ -38,6 +41,9 @@ const useCases = [
   StartSessionUseCase,
   DeleteSessionUseCase,
   DeleteSessionExceptUseCase,
+  RefreshTokenUseCase,
+  UpdateSessionUseCase,
+  LogoutUserUseCase,
 ];
 
 @Module({

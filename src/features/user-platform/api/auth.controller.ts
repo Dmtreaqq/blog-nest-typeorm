@@ -30,6 +30,11 @@ import { RecoverUserPasswordCommand } from '../application/usecases/recover-pass
 import { ConfirmNewPasswordDto } from './input-dto/confirm-new-password.dto';
 import { ConfirmPasswordCommand } from '../application/usecases/confirm-password.usecase';
 import { StartSessionCommand } from '../application/usecases/start-session.usecase';
+import { JwtRefreshAuthGuard } from '../../../common/guards/jwt-refresh-auth.guard';
+import { RefreshTokenCommand } from '../application/usecases/refresh-token.usecase';
+import { UpdateSessionCommand } from '../application/usecases/update-session.usecase';
+import { UserDeviceSessionsRepository } from '../repositories/user-device-sessions.repository';
+import { LogoutUserCommand } from '../application/usecases/logout-user.usecase';
 
 @Controller('auth')
 export class AuthController {
@@ -37,6 +42,7 @@ export class AuthController {
     private commandBus: CommandBus,
     private authService: AuthService,
     private usersQueryRepository: UsersQueryRepository,
+    private sessionRepo: UserDeviceSessionsRepository,
   ) {}
 
   @UseGuards(LocalAuthGuard)
@@ -119,5 +125,54 @@ export class AuthController {
     );
 
     return MeViewDto.mapToView(user as any);
+  }
+
+  @UseGuards(JwtRefreshAuthGuard)
+  @HttpCode(HttpStatus.OK)
+  @Post('refresh-token')
+  async refreshToken(
+    @GetUser() userContext: { id: string; deviceId: string; iat: number },
+    @Res({ passthrough: true }) res: Response,
+  ): Promise<{ accessToken: string }> {
+    const { deviceId, id, iat } = userContext;
+
+    const tokens = await this.commandBus.execute(
+      new RefreshTokenCommand(deviceId, id, iat),
+    );
+    const { iat: newIat, exp } = tokens;
+
+    await this.commandBus.execute(
+      new UpdateSessionCommand(deviceId, id, newIat, exp, iat),
+    );
+
+    res.cookie('refreshToken', tokens.refreshToken, {
+      httpOnly: true,
+      secure: true,
+      expires: add(new Date(), { hours: 24 }),
+    });
+
+    return { accessToken: tokens.accessToken };
+  }
+
+  @UseGuards(JwtRefreshAuthGuard)
+  @HttpCode(HttpStatus.NO_CONTENT)
+  @Post('logout')
+  async logout(
+    @GetUser() userContext: { deviceId: string; id: string; iat: number },
+    @Res({ passthrough: true }) res: Response,
+  ) {
+    await this.commandBus.execute(
+      new LogoutUserCommand(
+        userContext.deviceId,
+        userContext.id,
+        userContext.iat,
+      ),
+    );
+
+    res.clearCookie('refreshToken', {
+      httpOnly: true,
+      secure: true,
+      expires: add(new Date(), { hours: 24 }),
+    });
   }
 }

@@ -1,4 +1,4 @@
-import { Column, Entity, ManyToOne, PrimaryGeneratedColumn } from 'typeorm';
+import { Column, CreateDateColumn, Entity, ManyToOne, PrimaryGeneratedColumn } from 'typeorm';
 import { userDeviceSessionDict } from './dictionary/user-device-session.dict';
 import { User } from './user.entity';
 import { CreateDeviceSessionDto } from '../dto/create-device-session.dto';
@@ -32,6 +32,9 @@ export class UserDeviceSession {
   @ManyToOne(() => User, (user) => user.sessions)
   user: User;
 
+  @CreateDateColumn({ name: 'created_at', type: 'timestamptz' })
+  createdAt: Date;
+
   static create(dto: CreateDeviceSessionDto): UserDeviceSession {
     const session = new UserDeviceSession();
 
@@ -43,5 +46,10 @@ export class UserDeviceSession {
     session.expirationDate = dto.expirationDate;
 
     return session;
+  }
+
+  updateSession(iat: number, exp: number) {
+    this.issuedAt = iat;
+    this.expirationDate = exp;
   }
 }

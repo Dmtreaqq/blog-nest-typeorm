@@ -14,10 +14,7 @@ import { UserDeviceSessionsViewDto } from './view-dto/user-device-sessions.view-
 import { UserContext } from '../../../common/dto/user-context.dto';
 import { CommandBus } from '@nestjs/cqrs';
 import { DeleteSessionCommand } from '../application/usecases/delete-session.usecase';
-import {
-  DeleteSessionExceptCommand,
-  DeleteSessionExceptUseCase,
-} from '../application/usecases/delete-session-except.usecase';
+import { DeleteSessionExceptCommand } from '../application/usecases/delete-session-except.usecase';
 
 @UseGuards(JwtRefreshAuthGuard)
 @Controller('security/devices')

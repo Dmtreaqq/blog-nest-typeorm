@@ -22,6 +22,8 @@ class AllExceptionsFilter implements ExceptionFilter {
         : HttpStatus.INTERNAL_SERVER_ERROR;
 
     if (this.commonConfig.env !== 'production') {
+      console.log(exception.message);
+      console.log(exception.hint);
       response.status(status).json({
         statusCode: status,
         timestamp: new Date().toISOString(),
@@ -30,6 +32,8 @@ class AllExceptionsFilter implements ExceptionFilter {
         stackTrace: (exception as any).stackTrace,
       });
     } else {
+      console.log(exception.message);
+      console.log(exception.hint);
       response.status(status).json({
         message: 'Some server error occured',
       });
@@ -64,6 +68,8 @@ class CustomHttpExceptionsFilter implements ExceptionFilter {
 
       response.status(HttpStatus.BAD_REQUEST).json(errorResponse);
     } else {
+      // TODO: REMOVE IN PROD
+      console.log(exception.message);
       response.status(status).json(exception.getResponse());
     }
   }

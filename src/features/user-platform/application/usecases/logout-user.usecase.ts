@@ -31,6 +31,10 @@ export class LogoutUserUseCase
       command.deviceId,
     );
 
+    if (!session) {
+      throw new UnauthorizedException();
+    }
+
     if (session.issuedAt !== command.iat) {
       throw new UnauthorizedException();
     }

@@ -3,6 +3,7 @@ import {
   CreateDateColumn,
   DeleteDateColumn,
   Entity,
+  OneToMany,
   OneToOne,
   PrimaryGeneratedColumn,
 } from 'typeorm';
@@ -11,6 +12,7 @@ import { UserMetaInfo } from './user-meta-info.entity';
 import { CreateUserDto } from '../dto/create-user.dto';
 import { randomUUID } from 'node:crypto';
 import { add } from 'date-fns/add';
+import { UserDeviceSession } from './user-device-session.entity';
 const { createdAt, deletedAt } = userDict;
 
 @Entity()
@@ -37,6 +39,9 @@ export class User {
     cascade: true,
   })
   userMetaInfo: UserMetaInfo;
+
+  @OneToMany(() => UserDeviceSession, (session) => session.user)
+  sessions: UserDeviceSession[];
 
   static create(dto: CreateUserDto): User {
     const user = new User();

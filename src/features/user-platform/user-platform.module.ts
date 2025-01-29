@@ -19,6 +19,7 @@ import { RegisterUserUseCase } from './application/usecases/register-user.usecas
 import { ConfirmUserUseCase } from './application/usecases/confirm-user.usecase';
 import { RecoverUserPasswordUseCase } from './application/usecases/recover-password.usecase';
 import { ConfirmPasswordUseCase } from './application/usecases/confirm-password.usecase';
+import { UserDeviceSession } from './domain/user-device-session.entity';
 
 const useCases = [
   CreateUserUseCase,
@@ -35,7 +36,7 @@ const useCases = [
   imports: [
     CommunicationModule,
     JwtModule.register({}),
-    TypeOrmModule.forFeature([User, UserMetaInfo]),
+    TypeOrmModule.forFeature([User, UserMetaInfo, UserDeviceSession]),
   ],
   providers: [
     LocalStrategy,

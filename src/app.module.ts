@@ -5,6 +5,8 @@ import { CommonConfig } from './common/common.config';
 import { TestingModule } from './features/testing/testing.module';
 import { UserPlatformModule } from './features/user-platform/user-platform.module';
 import { TypeOrmModule } from '@nestjs/typeorm';
+import { UserPlatformConfig } from './features/user-platform/config/user-platform.config';
+import { ThrottlerModule } from '@nestjs/throttler';
 
 // TODO: ADD HUSKY WITH ESLINT !
 
@@ -29,18 +31,18 @@ import { TypeOrmModule } from '@nestjs/typeorm';
     }),
     UserPlatformModule,
     // BloggersPlatformModule,
-    // ThrottlerModule.forRootAsync({
-    //   imports: [UserPlatformModule],
-    //   inject: [UserPlatformConfig],
-    //   useFactory: (userPlatformConfig: UserPlatformConfig) => {
-    //     return [
-    //       {
-    //         ttl: userPlatformConfig.throttleTtl,
-    //         limit: userPlatformConfig.throttleLimit,
-    //       },
-    //     ];
-    //   },
-    // }),
+    ThrottlerModule.forRootAsync({
+      imports: [UserPlatformModule],
+      inject: [UserPlatformConfig],
+      useFactory: (userPlatformConfig: UserPlatformConfig) => {
+        return [
+          {
+            ttl: userPlatformConfig.throttleTtl,
+            limit: userPlatformConfig.throttleLimit,
+          },
+        ];
+      },
+    }),
     CommonModule,
     configDynamicModule,
   ],

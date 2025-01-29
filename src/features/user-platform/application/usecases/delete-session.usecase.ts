@@ -36,9 +36,9 @@ export class DeleteSessionUseCase
       throw new ForbiddenException();
     }
 
-    if (session.issuedAt !== command.iat) {
-      throw new UnauthorizedException();
-    }
+    // if (session.issuedAt !== command.iat) {
+    //   throw new UnauthorizedException();
+    // }
 
     await this.sessionsRepository.deleteSession(session.id);
   }

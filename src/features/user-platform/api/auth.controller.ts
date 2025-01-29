@@ -35,7 +35,9 @@ import { RefreshTokenCommand } from '../application/usecases/refresh-token.useca
 import { UpdateSessionCommand } from '../application/usecases/update-session.usecase';
 import { UserDeviceSessionsRepository } from '../repositories/user-device-sessions.repository';
 import { LogoutUserCommand } from '../application/usecases/logout-user.usecase';
+import { ThrottlerGuard } from '@nestjs/throttler';
 
+@UseGuards(ThrottlerGuard)
 @Controller('auth')
 export class AuthController {
   constructor(

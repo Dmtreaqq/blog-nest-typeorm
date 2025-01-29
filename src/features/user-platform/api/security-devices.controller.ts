@@ -26,20 +26,26 @@ export class SecurityDevicesController {
 
   @Get()
   async getAllDeviceSessions(
-    @GetUser() userContext: UserContext,
+    @GetUser() userContext: { id: string; deviceId: string; iat: number },
   ): Promise<UserDeviceSessionsViewDto[]> {
     return this.userDeviceSessionsQueryRepository.getAllSessions(
       userContext.id,
+      userContext.deviceId,
+      userContext.iat,
     );
   }
 
   @Delete()
   @HttpCode(HttpStatus.NO_CONTENT)
   async deleteAllDeviceSession(
-    @GetUser() userContext: { id: string; deviceId: string },
+    @GetUser() userContext: { id: string; deviceId: string; iat: number },
   ) {
     await this.commandBus.execute(
-      new DeleteSessionExceptCommand(userContext.deviceId, userContext.id),
+      new DeleteSessionExceptCommand(
+        userContext.deviceId,
+        userContext.id,
+        userContext.iat,
+      ),
     );
   }
 
@@ -48,11 +54,11 @@ export class SecurityDevicesController {
   async deleteDeviceSession(
     @Param() params: { id: string },
     @GetUser()
-    userContext: { id: string; deviceId: string },
+    userContext: { id: string; deviceId: string; iat: number },
   ) {
     await this.commandBus.execute(
       // deviceId
-      new DeleteSessionCommand(params.id, userContext.id),
+      new DeleteSessionCommand(params.id, userContext.id, userContext.iat),
     );
   }
 }

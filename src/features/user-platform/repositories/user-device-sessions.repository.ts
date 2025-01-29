@@ -13,4 +13,14 @@ export class UserDeviceSessionsRepository {
   async save(session: UserDeviceSession) {
     await this.userSessionsRepository.save(session);
   }
+
+  async findByDeviceId(deviceId: string): Promise<UserDeviceSession> {
+    return this.userSessionsRepository.findOneBy({
+      deviceId,
+    });
+  }
+
+  async deleteSession(id: string) {
+    await this.userSessionsRepository.delete({ id });
+  }
 }

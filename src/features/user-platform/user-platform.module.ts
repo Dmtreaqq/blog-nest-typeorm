@@ -24,6 +24,7 @@ import { StartSessionUseCase } from './application/usecases/start-session.usecas
 import { UserDeviceSessionsRepository } from './repositories/user-device-sessions.repository';
 import { UserDeviceSessionQueryRepository } from './repositories/query/user-device-session-query.repository';
 import { SecurityDevicesController } from './api/security-devices.controller';
+import { DeleteSessionUseCase } from './application/usecases/delete-session.usecase';
 
 const useCases = [
   CreateUserUseCase,
@@ -34,6 +35,7 @@ const useCases = [
   RecoverUserPasswordUseCase,
   ConfirmPasswordUseCase,
   StartSessionUseCase,
+  DeleteSessionUseCase,
 ];
 
 @Module({

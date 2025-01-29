@@ -12,13 +12,15 @@ import { GetUser } from '../../../common/decorators/get-user.decorator';
 import { UserDeviceSessionQueryRepository } from '../repositories/query/user-device-session-query.repository';
 import { UserDeviceSessionsViewDto } from './view-dto/user-device-sessions.view-dto';
 import { UserContext } from '../../../common/dto/user-context.dto';
+import { CommandBus } from '@nestjs/cqrs';
+import { DeleteSessionCommand } from '../application/usecases/delete-session.usecase';
 
 @UseGuards(JwtRefreshAuthGuard)
 @Controller('security/devices')
 export class SecurityDevicesController {
   constructor(
     private userDeviceSessionsQueryRepository: UserDeviceSessionQueryRepository,
-    // private userDeviceSessionsService: UserDeviceSessionsService,
+    private commandBus: CommandBus,
   ) {}
 
   @Get()
@@ -48,9 +50,9 @@ export class SecurityDevicesController {
     @GetUser()
     userContext: { id: string; deviceId: string },
   ) {
-    await this.userDeviceSessionsService.deleteSpecificDeviceSession(
-      params.id,
-      userContext.id,
+    await this.commandBus.execute(
+      // deviceId
+      new DeleteSessionCommand(params.id, userContext.id),
     );
   }
 }

@@ -6,6 +6,7 @@ import { JwtService } from '@nestjs/jwt';
 import { CommonConfig } from '../../../../common/common.config';
 import { UserPlatformConfig } from '../../config/user-platform.config';
 import { UserDeviceSessionsRepository } from '../../repositories/user-device-sessions.repository';
+import { UnauthorizedException } from '@nestjs/common';
 
 export class LogoutUserCommand {
   constructor(
@@ -29,6 +30,11 @@ export class LogoutUserUseCase
     const session = await this.sessionsRepository.findByDeviceId(
       command.deviceId,
     );
+
+    if (session.issuedAt !== command.iat) {
+      throw new UnauthorizedException();
+    }
+
     await this.sessionsRepository.deleteSession(session.id);
   }
 }

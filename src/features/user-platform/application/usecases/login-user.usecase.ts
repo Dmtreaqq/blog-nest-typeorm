@@ -1,7 +1,4 @@
 import { CommandHandler, ICommandHandler } from '@nestjs/cqrs';
-import { UsersRepository } from '../../repositories/users.repository';
-import { User } from '../../domain/user.entity';
-import { BadRequestException } from '@nestjs/common';
 import { LoginUserDto } from '../../dto/login-user.dto';
 import { randomUUID } from 'node:crypto';
 import { UserContext } from '../../../../common/dto/user-context.dto';
@@ -18,7 +15,6 @@ export class LoginUserUseCase
   implements ICommandHandler<LoginUserCommand, any>
 {
   constructor(
-    private usersRepository: UsersRepository,
     private jwtService: JwtService,
     private commonConfig: CommonConfig,
     private userPlatformConfig: UserPlatformConfig,

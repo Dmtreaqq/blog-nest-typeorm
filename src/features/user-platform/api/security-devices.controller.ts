@@ -41,16 +41,16 @@ export class SecurityDevicesController {
   //   );
   // }
   //
-  // @Delete(':id')
-  // @HttpCode(HttpStatus.NO_CONTENT)
-  // async deleteDeviceSession(
-  //   @Param() params: { id: string },
-  //   @GetUser()
-  //   userContext: { id: string; deviceId: string },
-  // ) {
-  //   await this.userDeviceSessionsService.deleteSpecificDeviceSession(
-  //     params.id,
-  //     userContext.id,
-  //   );
-  // }
+  @Delete(':id')
+  @HttpCode(HttpStatus.NO_CONTENT)
+  async deleteDeviceSession(
+    @Param() params: { id: string },
+    @GetUser()
+    userContext: { id: string; deviceId: string },
+  ) {
+    await this.userDeviceSessionsService.deleteSpecificDeviceSession(
+      params.id,
+      userContext.id,
+    );
+  }
 }

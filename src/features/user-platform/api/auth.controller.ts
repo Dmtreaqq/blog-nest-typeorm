@@ -29,6 +29,7 @@ import { UsersQueryRepository } from '../repositories/query/user-query.repositor
 import { RecoverUserPasswordCommand } from '../application/usecases/recover-password.usecase';
 import { ConfirmNewPasswordDto } from './input-dto/confirm-new-password.dto';
 import { ConfirmPasswordCommand } from '../application/usecases/confirm-password.usecase';
+import { StartSessionCommand } from '../application/usecases/start-session.usecase';
 
 @Controller('auth')
 export class AuthController {
@@ -52,6 +53,18 @@ export class AuthController {
         userId: userContext.id,
         ip: ip,
         userAgent: userAgent,
+      }),
+    );
+
+    // MAYBE START SESSION HERE ?
+    await this.commandBus.execute(
+      new StartSessionCommand({
+        userId: userContext.id,
+        deviceId: loginResult.deviceId,
+        deviceName: userAgent ?? 'Unknown name',
+        ip,
+        issuedAt: loginResult.iat,
+        expirationDate: loginResult.exp,
       }),
     );
 

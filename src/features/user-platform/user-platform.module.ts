@@ -20,6 +20,8 @@ import { ConfirmUserUseCase } from './application/usecases/confirm-user.usecase'
 import { RecoverUserPasswordUseCase } from './application/usecases/recover-password.usecase';
 import { ConfirmPasswordUseCase } from './application/usecases/confirm-password.usecase';
 import { UserDeviceSession } from './domain/user-device-session.entity';
+import { StartSessionUseCase } from './application/usecases/start-session.usecase';
+import { UserDeviceSessionsRepository } from './repositories/user-device-sessions.repository';
 
 const useCases = [
   CreateUserUseCase,
@@ -29,6 +31,7 @@ const useCases = [
   ConfirmUserUseCase,
   RecoverUserPasswordUseCase,
   ConfirmPasswordUseCase,
+  StartSessionUseCase,
 ];
 
 @Module({
@@ -43,6 +46,7 @@ const useCases = [
     CryptoService,
     UsersRepository,
     UsersQueryRepository,
+    UserDeviceSessionsRepository,
     AuthService,
     UserPlatformConfig,
     ...useCases,

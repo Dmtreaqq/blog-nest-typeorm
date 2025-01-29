@@ -41,10 +41,14 @@ export class LoginUserUseCase
           expiresIn: this.userPlatformConfig.refreshTokenExpiration + 's',
         },
       ),
+      deviceId,
     };
 
+    // TODO: Move to usecase
     // START SESSION
-    // const decodedRefreshToken = this.jwtService.decode(tokens.refreshToken);
+    const decodedRefreshToken = this.jwtService.decode(tokens.refreshToken);
+    tokens['iat'] = decodedRefreshToken.iat;
+    tokens['exp'] = decodedRefreshToken.exp;
 
     // await this.userDeviceSessionsService.createDeviceSession({
     //   userId,

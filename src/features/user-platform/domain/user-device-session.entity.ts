@@ -1,6 +1,7 @@
 import { Column, Entity, ManyToOne, PrimaryGeneratedColumn } from 'typeorm';
 import { userDeviceSessionDict } from './dictionary/user-device-session.dict';
 import { User } from './user.entity';
+import { CreateDeviceSessionDto } from '../dto/create-device-session.dto';
 
 const { issuedAt, deviceName, deviceId, expirationDate } =
   userDeviceSessionDict;
@@ -30,4 +31,17 @@ export class UserDeviceSession {
 
   @ManyToOne(() => User, (user) => user.sessions)
   user: User;
+
+  static create(dto: CreateDeviceSessionDto): UserDeviceSession {
+    const session = new UserDeviceSession();
+
+    session.userId = dto.userId;
+    session.ip = dto.ip;
+    session.deviceId = dto.deviceId;
+    session.deviceName = dto.deviceName;
+    session.issuedAt = dto.issuedAt;
+    session.expirationDate = dto.expirationDate;
+
+    return session;
+  }
 }

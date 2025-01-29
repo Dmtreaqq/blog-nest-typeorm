@@ -22,6 +22,8 @@ import { ConfirmPasswordUseCase } from './application/usecases/confirm-password.
 import { UserDeviceSession } from './domain/user-device-session.entity';
 import { StartSessionUseCase } from './application/usecases/start-session.usecase';
 import { UserDeviceSessionsRepository } from './repositories/user-device-sessions.repository';
+import { UserDeviceSessionQueryRepository } from './repositories/query/user-device-session-query.repository';
+import { SecurityDevicesController } from './api/security-devices.controller';
 
 const useCases = [
   CreateUserUseCase,
@@ -35,7 +37,7 @@ const useCases = [
 ];
 
 @Module({
-  controllers: [UsersController, AuthController],
+  controllers: [UsersController, AuthController, SecurityDevicesController],
   imports: [
     CommunicationModule,
     JwtModule.register({}),
@@ -47,6 +49,7 @@ const useCases = [
     UsersRepository,
     UsersQueryRepository,
     UserDeviceSessionsRepository,
+    UserDeviceSessionQueryRepository,
     AuthService,
     UserPlatformConfig,
     ...useCases,

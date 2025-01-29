@@ -51,8 +51,6 @@ export class AuthController {
     const loginResult = await this.commandBus.execute(
       new LoginUserCommand({
         userId: userContext.id,
-        ip: ip,
-        userAgent: userAgent,
       }),
     );
 

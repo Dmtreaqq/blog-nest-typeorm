@@ -25,7 +25,7 @@ export class LoginUserUseCase
   ) {}
 
   async execute(command: LoginUserCommand): Promise<any> {
-    const { userId, userAgent, ip } = command.dto;
+    const { userId } = command.dto;
     const payload = { id: userId } as UserContext;
     const deviceId = randomUUID();
 
@@ -44,20 +44,9 @@ export class LoginUserUseCase
       deviceId,
     };
 
-    // TODO: Move to usecase
-    // START SESSION
     const decodedRefreshToken = this.jwtService.decode(tokens.refreshToken);
     tokens['iat'] = decodedRefreshToken.iat;
     tokens['exp'] = decodedRefreshToken.exp;
-
-    // await this.userDeviceSessionsService.createDeviceSession({
-    //   userId,
-    //   deviceId,
-    //   ip: ip ?? 'Unknown Ip',
-    //   issuedAt: decodedRefreshToken.iat,
-    //   expirationDate: decodedRefreshToken.exp,
-    //   deviceName: userAgent ?? 'Unknown name',
-    // });
 
     return tokens;
   }

@@ -6,7 +6,6 @@ import { CommonConfig } from '../common.config';
 
 @Injectable()
 export class JwtStrategy extends PassportStrategy(Strategy, 'jwt') {
-  // TODO: спросить, как оно сюда попадает??
   constructor(commonConfig: CommonConfig) {
     super({
       jwtFromRequest: ExtractJwt.fromAuthHeaderAsBearerToken(),

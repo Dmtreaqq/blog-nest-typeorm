@@ -18,7 +18,6 @@ import { CommunicationConfig } from './communication.config';
         };
       },
       inject: [CommunicationConfig],
-      // TODO: почему не работало иначе, когда помещал в Providers ??
       extraProviders: [CommunicationConfig],
     }),
   ],

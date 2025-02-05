@@ -25,7 +25,6 @@ export class MeViewDto extends OmitType(UserViewDto, [
 ] as const) {
   userId: string;
 
-  // TODO: change typing
   static mapToView(user: UserViewDto): MeViewDto {
     const dto = new MeViewDto();
 

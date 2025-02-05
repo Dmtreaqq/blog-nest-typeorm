@@ -37,7 +37,6 @@ export class UpdateSessionUseCase
 
     session.updateSession(command.newIat, command.newExp);
 
-
     await this.sessionsRepository.save(session);
   }
 }

@@ -6,7 +6,6 @@ export class UserDeviceSessionsViewDto {
   lastActiveDate: string;
   deviceId: string;
 
-  // todo typing
   static mapToView(session: UserDeviceSession): UserDeviceSessionsViewDto {
     const dto = new UserDeviceSessionsViewDto();
 

@@ -14,7 +14,6 @@ export const fromUTF8ToBase64 = (code: string) => {
 };
 
 export class BasicAuthGuard implements CanActivate {
-  // TODO: спросить про Inject
   constructor(@Inject(CommonConfig) private commonConfig: CommonConfig) {}
 
   canActivate(

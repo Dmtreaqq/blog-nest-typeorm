@@ -1,7 +1,7 @@
 import { BaseSortablePaginationParams } from '../../../../common/dto/base-query-params.input';
 import { IsEnum, IsOptional, IsString } from 'class-validator';
 
-enum UsersSortBy {
+export enum UsersSortBy {
   CreatedAt = 'createdAt',
   Login = 'login',
   Email = 'email',

@@ -6,5 +6,5 @@ export class IdInputDto {
 
   @IsUUID()
   @IsOptional()
-  postId: string;
+  postId?: string;
 }

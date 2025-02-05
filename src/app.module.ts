@@ -25,6 +25,7 @@ import { ThrottlerModule } from '@nestjs/throttler';
           autoLoadEntities: true,
           synchronize: true,
           ssl: commonConfig.isDbSsl,
+          logging: true,
         };
       },
       inject: [CommonConfig],

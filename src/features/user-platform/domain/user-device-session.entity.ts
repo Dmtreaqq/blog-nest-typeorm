@@ -1,13 +1,14 @@
-import { Column, CreateDateColumn, Entity, ManyToOne, PrimaryGeneratedColumn } from 'typeorm';
+import { Column, Entity, ManyToOne, PrimaryGeneratedColumn } from 'typeorm';
 import { userDeviceSessionDict } from './dictionary/user-device-session.dict';
 import { User } from './user.entity';
 import { CreateDeviceSessionDto } from '../dto/create-device-session.dto';
+import { BaseEntity } from '../../../common/domain/base.entity';
 
 const { issuedAt, deviceName, deviceId, expirationDate } =
   userDeviceSessionDict;
 
 @Entity()
-export class UserDeviceSession {
+export class UserDeviceSession extends BaseEntity {
   @PrimaryGeneratedColumn('uuid')
   id: string;
 
@@ -31,9 +32,6 @@ export class UserDeviceSession {
 
   @ManyToOne(() => User, (user) => user.sessions)
   user: User;
-
-  @CreateDateColumn({ name: 'created_at', type: 'timestamptz' })
-  createdAt: Date;
 
   static create(dto: CreateDeviceSessionDto): UserDeviceSession {
     const session = new UserDeviceSession();

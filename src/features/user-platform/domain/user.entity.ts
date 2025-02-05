@@ -1,22 +1,19 @@
 import {
   Column,
-  CreateDateColumn,
-  DeleteDateColumn,
   Entity,
   OneToMany,
   OneToOne,
   PrimaryGeneratedColumn,
 } from 'typeorm';
-import { userDict } from './dictionary/user.dict';
 import { UserMetaInfo } from './user-meta-info.entity';
 import { CreateUserDto } from '../dto/create-user.dto';
 import { randomUUID } from 'node:crypto';
 import { add } from 'date-fns/add';
 import { UserDeviceSession } from './user-device-session.entity';
-const { createdAt, deletedAt } = userDict;
+import { BaseEntity } from '../../../common/domain/base.entity';
 
 @Entity()
-export class User {
+export class User extends BaseEntity {
   @PrimaryGeneratedColumn('uuid')
   id: string;
 
@@ -28,12 +25,6 @@ export class User {
 
   @Column({ type: 'varchar' })
   email: string;
-
-  @CreateDateColumn({ name: createdAt, type: 'timestamptz' })
-  createdAt: Date;
-
-  @DeleteDateColumn({ name: deletedAt, type: 'timestamptz' })
-  deletedAt: Date;
 
   @OneToOne(() => UserMetaInfo, (userMetaInfo) => userMetaInfo.user, {
     cascade: true,

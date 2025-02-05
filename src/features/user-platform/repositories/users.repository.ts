@@ -15,6 +15,10 @@ export class UsersRepository {
     return this.usersRepository.findOneBy({ id });
   }
 
+  async findByLogin(login: string): Promise<User | null> {
+    return this.usersRepository.findOneBy({ login });
+  }
+
   async findByLoginOrEmail(login: string, email: string): Promise<User | null> {
     // TODO: Здесь метод репозитория, но я не возвращаю мета данньіе
     const user = await this.usersRepository

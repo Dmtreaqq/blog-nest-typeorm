@@ -7,6 +7,7 @@ import {
   HttpStatus,
   Param,
   Post,
+  Put,
   Query,
   UseGuards,
 } from '@nestjs/common';
@@ -22,6 +23,8 @@ import { CommandBus } from '@nestjs/cqrs';
 import { CreateUserCommand } from '../application/usecases/create-user.usecase';
 import { UsersQueryRepository } from '../repositories/query/user-query.repository';
 import { DeleteUserCommand } from '../application/usecases/delete-user.usecase';
+import { UpdateUserInputDto } from './input-dto/update-user.input-dto';
+import { UpdateUserCommand } from '../application/usecases/update-user.usecase';
 
 @Controller('sa/users')
 export class UsersController {
@@ -48,6 +51,19 @@ export class UsersController {
   @Post()
   async createUser(@Body() body: CreateUserInputDto): Promise<UserViewDto> {
     const userId = await this.commandBus.execute(new CreateUserCommand(body));
+
+    return this.usersQueryRepository.findUserByIdOrThrow(userId);
+  }
+
+  @UseGuards(BasicAuthGuard)
+  @Put(':id')
+  async updateUser(@Body() body: UpdateUserInputDto): Promise<UserViewDto> {
+    const userId = await this.commandBus.execute(
+      new UpdateUserCommand({
+        id: body.id,
+        login: body.login,
+      }),
+    );
 
     return this.usersQueryRepository.findUserByIdOrThrow(userId);
   }

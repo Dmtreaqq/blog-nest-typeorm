@@ -1,7 +1,6 @@
 import { Repository } from 'typeorm';
 import { User } from '../domain/user.entity';
 import { InjectRepository } from '@nestjs/typeorm';
-import { NotFoundException } from '@nestjs/common';
 
 export class UsersRepository {
   constructor(
@@ -10,6 +9,10 @@ export class UsersRepository {
 
   async save(user: User): Promise<User> {
     return this.usersRepository.save(user);
+  }
+
+  async findById(id: string): Promise<User | null> {
+    return this.usersRepository.findOneBy({ id });
   }
 
   async findByLoginOrEmail(login: string, email: string): Promise<User | null> {
@@ -63,11 +66,6 @@ export class UsersRepository {
   }
 
   async deleteUser(id: string) {
-    const user = await this.usersRepository.findOneBy({ id });
-    if (!user) {
-      throw new NotFoundException();
-    }
-
     await this.usersRepository.softDelete({ id });
   }
 }

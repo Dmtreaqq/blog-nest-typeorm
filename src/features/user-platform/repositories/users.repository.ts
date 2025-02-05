@@ -8,8 +8,8 @@ export class UsersRepository {
     @InjectRepository(User) private usersRepository: Repository<User>,
   ) {}
 
-  async save(user: User) {
-    await this.usersRepository.save(user);
+  async save(user: User): Promise<User> {
+    return this.usersRepository.save(user);
   }
 
   async findByLoginOrEmail(login: string, email: string): Promise<User | null> {
@@ -60,12 +60,6 @@ export class UsersRepository {
     }
 
     return user;
-  }
-
-  async createUser(user: User) {
-    const createdUser = await this.usersRepository.save(user);
-
-    return createdUser.id;
   }
 
   async deleteUser(id: string) {

@@ -47,7 +47,7 @@ export class CreateUserUseCase
       isConfirmed: true,
     });
 
-    const userId = await this.usersRepository.createUser(user);
-    return userId;
+    const createdUser = await this.usersRepository.save(user);
+    return createdUser.id;
   }
 }

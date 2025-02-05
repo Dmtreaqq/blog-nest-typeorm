@@ -55,7 +55,7 @@ export class RegisterUserUseCase
       isConfirmed: false,
     });
 
-    await this.usersRepository.createUser(user);
+    await this.usersRepository.save(user);
 
     this.emailService
       .sendConfirmationEmail(user.userMetaInfo.confirmationCode, user.email)

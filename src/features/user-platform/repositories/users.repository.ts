@@ -68,11 +68,6 @@ export class UsersRepository {
       throw new NotFoundException();
     }
 
-    // TODO: Maybe this to use::))
-    // await this.usersRepository.softDelete({ id });
-
-    user.markDeleted();
-
-    await this.usersRepository.save(user);
+    await this.usersRepository.softDelete({ id });
   }
 }

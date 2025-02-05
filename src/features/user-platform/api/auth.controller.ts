@@ -126,7 +126,7 @@ export class AuthController {
       userContext.id,
     );
 
-    return MeViewDto.mapToView(user as any);
+    return MeViewDto.mapToView(user);
   }
 
   @UseGuards(JwtRefreshAuthGuard)

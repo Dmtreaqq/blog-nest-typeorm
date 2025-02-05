@@ -66,14 +66,6 @@ export class User {
     return user;
   }
 
-  markDeleted() {
-    if (this.deletedAt !== null) {
-      return;
-    }
-
-    this.deletedAt = new Date();
-  }
-
   markConfirmed() {
     this.userMetaInfo.isConfirmed = true;
   }

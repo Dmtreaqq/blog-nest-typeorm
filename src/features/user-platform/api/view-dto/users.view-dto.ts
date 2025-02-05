@@ -26,7 +26,7 @@ export class MeViewDto extends OmitType(UserViewDto, [
   userId: string;
 
   // TODO: change typing
-  static mapToView(user: any): MeViewDto {
+  static mapToView(user: UserViewDto): MeViewDto {
     const dto = new MeViewDto();
 
     dto.email = user.email;

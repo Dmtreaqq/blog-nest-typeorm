@@ -2,13 +2,13 @@ import { Column, Entity, ManyToOne, PrimaryGeneratedColumn } from 'typeorm';
 import { userDeviceSessionDict } from './dictionary/user-device-session.dict';
 import { User } from './user.entity';
 import { CreateDeviceSessionDto } from '../dto/create-device-session.dto';
-import { BaseEntity } from '../../../common/domain/base.entity';
+import { BaseTypeEntity } from '../../../common/domain/baseTypeEntity';
 
 const { issuedAt, deviceName, deviceId, expirationDate } =
   userDeviceSessionDict;
 
 @Entity()
-export class UserDeviceSession extends BaseEntity {
+export class UserDeviceSession extends BaseTypeEntity {
   @PrimaryGeneratedColumn('uuid')
   id: string;
 

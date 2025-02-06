@@ -8,7 +8,7 @@ import { baseDict } from './base.dict';
 
 const { createdAt, updatedAt, deletedAt } = baseDict;
 
-export class BaseEntity {
+export class BaseTypeEntity {
   @CreateDateColumn({ name: createdAt, type: 'timestamptz' })
   createdAt?: Date;
 

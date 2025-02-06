@@ -1,7 +1,7 @@
 import { Column, Entity, JoinColumn, OneToOne, PrimaryColumn } from 'typeorm';
 import { userMetaInfoDict } from './dictionary/user-meta-info.dict';
 import { User } from './user.entity';
-import { BaseEntity } from '../../../common/domain/base.entity';
+import { BaseTypeEntity } from '../../../common/domain/baseTypeEntity';
 
 const {
   isConfirmed,
@@ -12,7 +12,7 @@ const {
 } = userMetaInfoDict;
 
 @Entity()
-export class UserMetaInfo extends BaseEntity {
+export class UserMetaInfo extends BaseTypeEntity {
   @PrimaryColumn()
   userId?: string;
 

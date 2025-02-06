@@ -7,6 +7,7 @@ import { UserPlatformModule } from './features/user-platform/user-platform.modul
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { UserPlatformConfig } from './features/user-platform/config/user-platform.config';
 import { ThrottlerModule } from '@nestjs/throttler';
+import { BlogPlatformModule } from './features/blog-platform/blog-platform.module';
 
 // TODO: ADD HUSKY WITH ESLINT !
 
@@ -31,7 +32,7 @@ import { ThrottlerModule } from '@nestjs/throttler';
       inject: [CommonConfig],
     }),
     UserPlatformModule,
-    // BloggersPlatformModule,
+    BlogPlatformModule,
     ThrottlerModule.forRootAsync({
       imports: [UserPlatformModule],
       inject: [UserPlatformConfig],

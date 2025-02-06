@@ -20,4 +20,14 @@ export class BlogsRepository {
   async delete(id: string) {
     await this.blogsRepository.softDelete({ id });
   }
+
+  async blogIsExist(id: string): Promise<boolean> {
+    const blog = await this.blogsRepository.findOneBy({ id });
+
+    if (!blog) {
+      return false;
+    }
+
+    return true;
+  }
 }

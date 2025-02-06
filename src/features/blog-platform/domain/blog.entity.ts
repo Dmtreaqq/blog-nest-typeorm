@@ -1,6 +1,7 @@
 import { Column, Entity, PrimaryGeneratedColumn } from 'typeorm';
 import { BaseTypeEntity } from '../../../common/domain/baseTypeEntity';
 import { CreateBlogDto } from '../dto/create-blog.dto';
+import { UpdateBlogDto } from '../dto/update-blog.dto';
 
 @Entity()
 export class Blog extends BaseTypeEntity {
@@ -28,5 +29,11 @@ export class Blog extends BaseTypeEntity {
     blog.isMembership = dto.isMembership;
 
     return blog;
+  }
+
+  updateBlog(dto: UpdateBlogDto) {
+    this.name = dto.name;
+    this.description = dto.description;
+    this.websiteUrl = dto.websiteUrl;
   }
 }

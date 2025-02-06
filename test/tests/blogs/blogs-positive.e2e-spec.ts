@@ -51,7 +51,7 @@ describe('Blogs Positive (e2e)', () => {
       });
   });
 
-  it('should POST a blog successfully and GET', async () => {
+  it('should POST a blog successfully', async () => {
     const response = await request(app.getHttpServer())
       .post(API_PREFIX + API_PATH.BLOGS)
       .send({
@@ -62,14 +62,14 @@ describe('Blogs Positive (e2e)', () => {
       .set('authorization', basicAuthHeader)
       .expect(HttpStatus.CREATED);
 
-    // expect(response.body).toEqual({
-    //   name: 'Blog Name',
-    //   description: 'Desc',
-    //   websiteUrl: 'https://google.com',
-    //   isMembership: false,
-    //   id: expect.any(String),
-    //   createdAt: expect.any(String),
-    // });
+    expect(response.body).toEqual({
+      name: 'Blog Name',
+      description: 'Desc',
+      websiteUrl: 'https://google.com',
+      isMembership: false,
+      id: expect.any(String),
+      createdAt: expect.any(String),
+    });
   });
 
   // it('Should get created blog', async () => {

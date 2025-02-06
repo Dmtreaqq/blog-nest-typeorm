@@ -1,6 +1,5 @@
 import { Column, Entity, PrimaryGeneratedColumn } from 'typeorm';
 import { BaseTypeEntity } from '../../../common/domain/baseTypeEntity';
-import { CreatePostInputDto } from '../api/input-dto/create-post-input.dto';
 import { CreatePostDto } from '../dto/create-post.dto';
 
 @Entity()

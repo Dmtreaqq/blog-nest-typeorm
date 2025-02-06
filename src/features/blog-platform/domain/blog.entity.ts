@@ -1,7 +1,8 @@
-import { Column, Entity, PrimaryGeneratedColumn } from 'typeorm';
+import { Column, Entity, OneToMany, PrimaryGeneratedColumn } from 'typeorm';
 import { BaseTypeEntity } from '../../../common/domain/baseTypeEntity';
 import { CreateBlogDto } from '../dto/create-blog.dto';
 import { UpdateBlogDto } from '../dto/update-blog.dto';
+import { Post } from './post.entity';
 
 @Entity()
 export class Blog extends BaseTypeEntity {
@@ -19,6 +20,9 @@ export class Blog extends BaseTypeEntity {
 
   @Column({ type: 'boolean' })
   isMembership: boolean;
+
+  @OneToMany(() => Post, (post) => post.blog)
+  posts: Post[];
 
   static create(dto: CreateBlogDto): Blog {
     const blog = new Blog();

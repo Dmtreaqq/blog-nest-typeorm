@@ -9,12 +9,26 @@ import { UpdateBlogUseCase } from './application/usecases/update-blog.usecase';
 import { BlogsQueryRepository } from './repositories/query/blogs-query.repository';
 import { BlogsController } from './api/blogs.controller';
 import { DeleteBlogUseCase } from './application/usecases/delete-blog.usecase';
+import { CreatePostUseCase } from './application/usecases/create-post.usecase';
+import { PostsRepository } from './repositories/posts.repository';
+import { PostsQueryRepository } from './repositories/query/posts-query.repository';
 
-const useCases = [CreateBlogUseCase, UpdateBlogUseCase, DeleteBlogUseCase];
+const useCases = [
+  CreateBlogUseCase,
+  UpdateBlogUseCase,
+  DeleteBlogUseCase,
+  CreatePostUseCase,
+];
 
 @Module({
   imports: [TypeOrmModule.forFeature([Blog, Post])],
   controllers: [BlogsController, BlogsAdminController],
-  providers: [BlogsRepository, BlogsQueryRepository, ...useCases],
+  providers: [
+    PostsRepository,
+    PostsQueryRepository,
+    BlogsRepository,
+    BlogsQueryRepository,
+    ...useCases,
+  ],
 })
 export class BlogPlatformModule {}

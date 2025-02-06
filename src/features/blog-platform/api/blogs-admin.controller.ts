@@ -23,12 +23,16 @@ import { DeleteBlogCommand } from '../application/usecases/delete-blog.usecase';
 import { BasePaginationViewDto } from '../../../common/dto/base-pagination.view-dto';
 import { BlogViewDto } from './view-dto/blog.view-dto';
 import { BlogQueryGetParams } from './input-dto/get-blogs-query.dto';
+import { CreatePostForBlogInputDto } from './input-dto/create-post-input.dto';
+import { PostsQueryRepository } from '../repositories/query/posts-query.repository';
+import { CreatePostCommand } from '../application/usecases/create-post.usecase';
 
 @Controller('sa/blogs')
 export class BlogsAdminController {
   constructor(
     private commandBus: CommandBus,
     private blogsQueryRepository: BlogsQueryRepository,
+    private postsQueryRepository: PostsQueryRepository,
   ) {}
 
   @UseGuards(BasicAuthGuard)
@@ -62,5 +66,18 @@ export class BlogsAdminController {
   @HttpCode(HttpStatus.NO_CONTENT)
   async deleteById(@Param() params: IdInputDto) {
     await this.commandBus.execute(new DeleteBlogCommand(params.id));
+  }
+
+  @UseGuards(BasicAuthGuard)
+  @Post(':id/posts')
+  async createPostForBlog(
+    @Body() dto: CreatePostForBlogInputDto,
+    @Param() params: IdInputDto,
+  ) {
+    const postId = await this.commandBus.execute(
+      new CreatePostCommand(params.id, dto),
+    );
+
+    return this.postsQueryRepository.findByIdOrThrow(postId);
   }
 }

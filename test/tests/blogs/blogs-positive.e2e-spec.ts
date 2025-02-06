@@ -72,19 +72,19 @@ describe('Blogs Positive (e2e)', () => {
     });
   });
 
-  // it('Should get created blog', async () => {
-  //   const createdBlog = await blogsTestManager.createBlog({
-  //     name: 'Blog Name',
-  //     description: 'Desc',
-  //     websiteUrl: 'https://google.com',
-  //   });
-  //
-  //   const getResponse = await request(app.getHttpServer())
-  //     .get(`${API_PREFIX + API_PATH.BLOGS}/${createdBlog.id}`)
-  //     .expect(HttpStatus.OK);
-  //
-  //   expect(getResponse.body).toEqual(createdBlog);
-  // });
+  it('Should get created blog', async () => {
+    const createdBlog = await blogsTestManager.createBlog({
+      name: 'Blog Name',
+      description: 'Desc',
+      websiteUrl: 'https://google.com',
+    });
+
+    const getResponse = await request(app.getHttpServer())
+      .get(`${API_PREFIX + API_PATH.BLOGS}/${createdBlog.id}`)
+      .expect(HttpStatus.OK);
+
+    expect(getResponse.body).toEqual(createdBlog);
+  });
   //
   // it('should GET blogs by searchNameTerm successfully', async () => {
   //   const blog = await blogsTestManager.createBlog({

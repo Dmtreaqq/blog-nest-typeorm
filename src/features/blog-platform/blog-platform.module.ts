@@ -6,12 +6,13 @@ import { BlogsRepository } from './repositories/blogs.repository';
 import { BlogsAdminController } from './api/blogs-admin.controller';
 import { UpdateBlogUseCase } from './application/usecases/update-blog.usecase';
 import { BlogsQueryRepository } from './repositories/query/blogs-query.repository';
+import { BlogsController } from './api/blogs.controller';
 
 const useCases = [CreateBlogUseCase, UpdateBlogUseCase];
 
 @Module({
   imports: [TypeOrmModule.forFeature([Blog])],
-  controllers: [BlogsAdminController],
+  controllers: [BlogsController, BlogsAdminController],
   providers: [BlogsRepository, BlogsQueryRepository, ...useCases],
 })
 export class BlogPlatformModule {}

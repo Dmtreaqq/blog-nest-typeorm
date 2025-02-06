@@ -26,6 +26,8 @@ import { BlogQueryGetParams } from './input-dto/get-blogs-query.dto';
 import { CreatePostForBlogInputDto } from './input-dto/create-post-input.dto';
 import { PostsQueryRepository } from '../repositories/query/posts-query.repository';
 import { CreatePostCommand } from '../application/usecases/create-post.usecase';
+import { UpdatePostInputDto } from './input-dto/update-post-input.dto';
+import { UpdatePostCommand } from '../application/usecases/update-post.usecase';
 
 @Controller('sa/blogs')
 export class BlogsAdminController {
@@ -41,6 +43,15 @@ export class BlogsAdminController {
     const blogId = await this.commandBus.execute(new CreateBlogCommand(dto));
 
     return this.blogsQueryRepository.findByIdOrThrow(blogId);
+  }
+
+  @UseGuards(BasicAuthGuard)
+  @Put(':id/posts/:postId')
+  @HttpCode(HttpStatus.NO_CONTENT)
+  async editPost(@Param() params: IdInputDto, @Body() dto: UpdatePostInputDto) {
+    return this.commandBus.execute(
+      new UpdatePostCommand(params.id, params.postId, dto),
+    );
   }
 
   @UseGuards(BasicAuthGuard)

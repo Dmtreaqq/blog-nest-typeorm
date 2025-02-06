@@ -7,8 +7,9 @@ import { BlogsAdminController } from './api/blogs-admin.controller';
 import { UpdateBlogUseCase } from './application/usecases/update-blog.usecase';
 import { BlogsQueryRepository } from './repositories/query/blogs-query.repository';
 import { BlogsController } from './api/blogs.controller';
+import { DeleteBlogUseCase } from './application/usecases/delete-blog.usecase';
 
-const useCases = [CreateBlogUseCase, UpdateBlogUseCase];
+const useCases = [CreateBlogUseCase, UpdateBlogUseCase, DeleteBlogUseCase];
 
 @Module({
   imports: [TypeOrmModule.forFeature([Blog])],

@@ -7,6 +7,7 @@ import { BlogsTestManager } from '../../helpers/blogs-test-manager';
 // import { CreatePostInputDto } from '../../../../src/features/bloggers-platform/api/input-dto/create-post-input.dto';
 import { basicAuthHeader } from '../../helpers/users-test-manager';
 import { initSettings } from '../../helpers/init-settings';
+import { UpdateBlogInputDto } from '../../../src/features/blog-platform/api/input-dto/update-blog-input.dto';
 
 describe('Blogs Positive (e2e)', () => {
   let app: INestApplication;
@@ -106,30 +107,30 @@ describe('Blogs Positive (e2e)', () => {
   //   expect(response2.body.items).toEqual(expect.arrayContaining([blog]));
   // });
   //
-  // it('should PUT blog successfully', async () => {
-  //   const blog = await blogsTestManager.createBlog({
-  //     name: 'Blog Name',
-  //     description: 'Desc',
-  //     websiteUrl: 'https://google.com',
-  //   });
-  //   const newBody: UpdateBlogInput = {
-  //     name: 'newBlogName',
-  //     description: blog.description,
-  //     websiteUrl: blog.websiteUrl,
-  //   };
-  //
-  //   await request(app.getHttpServer())
-  //     .put(`${API_PREFIX}${API_PATH.BLOGS}/${blog.id}`)
-  //     .send(newBody)
-  //     .set('authorization', basicAuthHeader)
-  //     .expect(HttpStatus.NO_CONTENT);
-  //
-  //   const getResponse = await request(app.getHttpServer())
-  //     .get(`${API_PREFIX}${API_PATH.BLOGS}/${blog.id}`)
-  //     .expect(HttpStatus.OK);
-  //
-  //   expect(getResponse.body).toEqual({ ...blog, name: newBody.name });
-  // });
+  it('should PUT blog successfully', async () => {
+    const blog = await blogsTestManager.createBlog({
+      name: 'Blog Name',
+      description: 'Desc',
+      websiteUrl: 'https://google.com',
+    });
+    const newBody: UpdateBlogInputDto = {
+      name: 'newBlogName',
+      description: blog.description,
+      websiteUrl: blog.websiteUrl,
+    };
+
+    await request(app.getHttpServer())
+      .put(`${API_PREFIX}${API_PATH.BLOGS}/${blog.id}`)
+      .send(newBody)
+      .set('authorization', basicAuthHeader)
+      .expect(HttpStatus.NO_CONTENT);
+
+    const getResponse = await request(app.getHttpServer())
+      .get(`${API_PREFIX}${API_PATH.BLOGS}/${blog.id}`)
+      .expect(HttpStatus.OK);
+
+    expect(getResponse.body).toEqual({ ...blog, name: newBody.name });
+  });
   //
   // it('should GET blogs using sorting successfully', async () => {
   //   const blogs = await blogsTestManager.createBlogs(5);
@@ -215,20 +216,20 @@ describe('Blogs Positive (e2e)', () => {
   // //   });
   // // });
   //
-  // it('should DELETE blog successfully', async () => {
-  //   const blog = await blogsTestManager.createBlog({
-  //     name: 'name',
-  //     websiteUrl: 'https://google.com',
-  //     description: 'some desc',
-  //   });
-  //
-  //   await request(app.getHttpServer())
-  //     .delete(`${API_PREFIX}${API_PATH.BLOGS}/${blog.id}`)
-  //     .set('authorization', basicAuthHeader)
-  //     .expect(HttpStatus.NO_CONTENT);
-  //
-  //   await request(app.getHttpServer())
-  //     .get(`${API_PREFIX}${API_PATH.BLOGS}/${blog.id}`)
-  //     .expect(HttpStatus.NOT_FOUND);
-  // });
+  it('should DELETE blog successfully', async () => {
+    const blog = await blogsTestManager.createBlog({
+      name: 'name',
+      websiteUrl: 'https://google.com',
+      description: 'some desc',
+    });
+
+    await request(app.getHttpServer())
+      .delete(`${API_PREFIX}${API_PATH.BLOGS}/${blog.id}`)
+      .set('authorization', basicAuthHeader)
+      .expect(HttpStatus.NO_CONTENT);
+
+    await request(app.getHttpServer())
+      .get(`${API_PREFIX}${API_PATH.BLOGS}/${blog.id}`)
+      .expect(HttpStatus.NOT_FOUND);
+  });
 });

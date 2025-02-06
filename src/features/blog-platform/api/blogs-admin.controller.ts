@@ -28,6 +28,10 @@ import { PostsQueryRepository } from '../repositories/query/posts-query.reposito
 import { CreatePostCommand } from '../application/usecases/create-post.usecase';
 import { UpdatePostInputDto } from './input-dto/update-post-input.dto';
 import { UpdatePostCommand } from '../application/usecases/update-post.usecase';
+import { DeletePostCommand } from '../application/usecases/delete-post.usecase';
+import { UserContext } from '../../../common/dto/user-context.dto';
+import { GetUser } from '../../../common/decorators/get-user.decorator';
+import { PostQueryGetParams } from './input-dto/get-posts-query.dto';
 
 @Controller('sa/blogs')
 export class BlogsAdminController {
@@ -51,6 +55,29 @@ export class BlogsAdminController {
   async editPost(@Param() params: IdInputDto, @Body() dto: UpdatePostInputDto) {
     return this.commandBus.execute(
       new UpdatePostCommand(params.id, params.postId, dto),
+    );
+  }
+
+  @UseGuards(BasicAuthGuard)
+  @Delete(':id/posts/:postId')
+  @HttpCode(HttpStatus.NO_CONTENT)
+  async deletePostById(@Param() params: IdInputDto) {
+    await this.commandBus.execute(
+      new DeletePostCommand(params.id, params.postId),
+    );
+  }
+
+  @UseGuards(BasicAuthGuard)
+  @Get(':id/posts')
+  async getPostsForBlog(
+    @Query() query: PostQueryGetParams,
+    @Param() params: IdInputDto,
+    @GetUser() userContext: UserContext,
+  ) {
+    return this.postsQueryRepository.findAllPostsForBlog(
+      query,
+      params.id,
+      userContext.id,
     );
   }
 

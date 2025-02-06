@@ -12,17 +12,22 @@ import { DeleteBlogUseCase } from './application/usecases/delete-blog.usecase';
 import { CreatePostUseCase } from './application/usecases/create-post.usecase';
 import { PostsRepository } from './repositories/posts.repository';
 import { PostsQueryRepository } from './repositories/query/posts-query.repository';
+import { DeletePostUseCase } from './application/usecases/delete-post.usecase';
+import { UpdatePostUseCase } from './application/usecases/update-post.usecase';
+import { PostsController } from './api/posts.controller';
 
 const useCases = [
   CreateBlogUseCase,
   UpdateBlogUseCase,
   DeleteBlogUseCase,
   CreatePostUseCase,
+  UpdatePostUseCase,
+  DeletePostUseCase,
 ];
 
 @Module({
   imports: [TypeOrmModule.forFeature([Blog, Post])],
-  controllers: [BlogsController, BlogsAdminController],
+  controllers: [BlogsController, BlogsAdminController, PostsController],
   providers: [
     PostsRepository,
     PostsQueryRepository,

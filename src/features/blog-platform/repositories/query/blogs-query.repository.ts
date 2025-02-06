@@ -44,10 +44,10 @@ export class BlogsQueryRepository {
       .limit(pageSize)
       .offset(query.calculateSkip());
 
-    const users = await builder.getMany();
+    const blogs = await builder.getMany();
 
     return BasePaginationViewDto.mapToView({
-      items: users.map(BlogViewDto.mapToView),
+      items: blogs.map(BlogViewDto.mapToView),
       pageSize,
       page: pageNumber,
       totalCount: blogsCount,

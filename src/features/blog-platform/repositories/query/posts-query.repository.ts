@@ -2,8 +2,8 @@ import { Injectable, NotFoundException } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 
 import { Repository } from 'typeorm';
-// import { BasePaginationViewDto } from '../../../../common/dto/base-pagination.view-dto';
-// import { PostQueryGetParams } from '../../api/input-dto/get-posts-query.dto';
+import { BasePaginationViewDto } from '../../../../common/dto/base-pagination.view-dto';
+import { PostQueryGetParams } from '../../api/input-dto/get-posts-query.dto';
 import { Post } from '../../domain/post.entity';
 import { PostViewDto } from '../../api/view-dto/post.view-dto';
 
@@ -28,35 +28,79 @@ export class PostsQueryRepository {
     );
   }
 
-  // async findAllBlogs(
-  //   query: BlogQueryGetParams,
-  // ): Promise<BasePaginationViewDto<BlogViewDto[]>> {
-  //   const { searchNameTerm, sortDirection, sortBy, pageSize, pageNumber } =
-  //     query;
-  //
-  //   const builder = this.blogsRepository.createQueryBuilder('b');
-  //
-  //   if (searchNameTerm) {
-  //     builder.where(`b.name ILIKE '%${searchNameTerm}%'`);
-  //   }
-  //
-  //   const blogsCount = await builder.getCount();
-  //
-  //   builder
-  //     .orderBy(
-  //       `b.${sortBy}`,
-  //       `${sortDirection.toUpperCase() as 'ASC' | 'DESC'}`,
-  //     )
-  //     .limit(pageSize)
-  //     .offset(query.calculateSkip());
-  //
-  //   const users = await builder.getMany();
-  //
-  //   return BasePaginationViewDto.mapToView({
-  //     items: users.map(BlogViewDto.mapToView),
-  //     pageSize,
-  //     page: pageNumber,
-  //     totalCount: blogsCount,
-  //   });
-  // }
+  async findAllPosts(
+    query: PostQueryGetParams,
+  ): Promise<BasePaginationViewDto<PostViewDto[]>> {
+    const { sortDirection, sortBy, pageSize, pageNumber } = query;
+
+    const builder = this.postsRepository.createQueryBuilder('p');
+
+    const postsCount = await builder.getCount();
+
+    builder
+      .orderBy(
+        `p.${sortBy}`,
+        `${sortDirection.toUpperCase() as 'ASC' | 'DESC'}`,
+      )
+      .limit(pageSize)
+      .offset(query.calculateSkip());
+
+    const posts = await builder.getMany();
+
+    return BasePaginationViewDto.mapToView({
+      items: posts.map((post) => {
+        return PostViewDto.mapToView(
+          post,
+          null,
+          { likesCount: 0, dislikesCount: 0 },
+          [],
+        );
+      }),
+      pageSize,
+      page: pageNumber,
+      totalCount: postsCount,
+    });
+  }
+
+  async findAllPostsForBlog(
+    query: PostQueryGetParams,
+    blogId: string,
+    userId?: string,
+  ): Promise<BasePaginationViewDto<PostViewDto[]>> {
+    const { sortDirection, sortBy, pageSize, pageNumber } = query;
+
+    const builder = this.postsRepository
+      .createQueryBuilder('p')
+      .where('p.blogId = :blogId', { blogId });
+
+    if (userId) {
+      // TODO: Take users reaction to builder (left join)
+    }
+
+    const postsCount = await builder.getCount();
+
+    builder
+      .orderBy(
+        `p.${sortBy}`,
+        `${sortDirection.toUpperCase() as 'ASC' | 'DESC'}`,
+      )
+      .limit(pageSize)
+      .offset(query.calculateSkip());
+
+    const posts = await builder.getMany();
+
+    return BasePaginationViewDto.mapToView({
+      items: posts.map((post) => {
+        return PostViewDto.mapToView(
+          post,
+          null,
+          { likesCount: 0, dislikesCount: 0 },
+          [],
+        );
+      }),
+      pageSize,
+      page: pageNumber,
+      totalCount: postsCount,
+    });
+  }
 }

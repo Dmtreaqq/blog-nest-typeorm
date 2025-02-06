@@ -1,27 +1,25 @@
 import { CommandHandler, ICommandHandler } from '@nestjs/cqrs';
 import { NotFoundException } from '@nestjs/common';
-import { UpdatePostInputDto } from '../../api/input-dto/update-post-input.dto';
 import { PostsRepository } from '../../repositories/posts.repository';
 import { BlogsRepository } from '../../repositories/blogs.repository';
 
-export class UpdatePostCommand {
+export class DeletePostCommand {
   constructor(
     public blogId: string,
     public postId: string,
-    public dto: UpdatePostInputDto,
   ) {}
 }
 
-@CommandHandler(UpdatePostCommand)
-export class UpdatePostUseCase
-  implements ICommandHandler<UpdatePostCommand, void>
+@CommandHandler(DeletePostCommand)
+export class DeletePostUseCase
+  implements ICommandHandler<DeletePostCommand, void>
 {
   constructor(
     private postsRepository: PostsRepository,
     private blogsRepository: BlogsRepository,
   ) {}
 
-  async execute(command: UpdatePostCommand): Promise<void> {
+  async execute(command: DeletePostCommand): Promise<void> {
     const isBlogExist = await this.blogsRepository.blogIsExist(command.blogId);
     if (!isBlogExist) {
       throw new NotFoundException('Blog not exist');
@@ -33,8 +31,6 @@ export class UpdatePostUseCase
       throw new NotFoundException();
     }
 
-    post.updatePost(command.dto);
-
-    await this.postsRepository.save(post);
+    await this.postsRepository.delete(command.postId);
   }
 }

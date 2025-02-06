@@ -86,27 +86,29 @@ describe('Blogs Positive (e2e)', () => {
 
     expect(getResponse.body).toEqual(createdBlog);
   });
-  //
-  // it('should GET blogs by searchNameTerm successfully', async () => {
-  //   const blog = await blogsTestManager.createBlog({
-  //     name: 'bOdY',
-  //     websiteUrl: 'https://test-domain.com',
-  //     description: 'This is a description for a blog name current',
-  //   });
-  //
-  //   const response1 = await request(app.getHttpServer())
-  //     .get(`${API_PREFIX}${API_PATH.BLOGS}/?searchNameTerm=BODY`)
-  //     .expect(HttpStatus.OK);
-  //
-  //   expect(response1.body.items).toEqual(expect.arrayContaining([blog]));
-  //
-  //   const response2 = await request(app.getHttpServer())
-  //     .get(`${API_PREFIX}${API_PATH.BLOGS}/?searchNameTerm=body`)
-  //     .expect(HttpStatus.OK);
-  //
-  //   expect(response2.body.items).toEqual(expect.arrayContaining([blog]));
-  // });
-  //
+
+  it('should GET blogs by searchNameTerm successfully', async () => {
+    const blog = await blogsTestManager.createBlog({
+      name: 'bOdY',
+      websiteUrl: 'https://test-domain.com',
+      description: 'This is a description for a blog name current',
+    });
+
+    const response1 = await request(app.getHttpServer())
+      .get(`${API_PREFIX}${API_PATH.BLOGS}/?searchNameTerm=BODY`)
+      .set('authorization', basicAuthHeader)
+      .expect(HttpStatus.OK);
+
+    expect(response1.body.items).toEqual(expect.arrayContaining([blog]));
+
+    const response2 = await request(app.getHttpServer())
+      .get(`${API_PREFIX}${API_PATH.BLOGS}/?searchNameTerm=body`)
+      .set('authorization', basicAuthHeader)
+      .expect(HttpStatus.OK);
+
+    expect(response2.body.items).toEqual(expect.arrayContaining([blog]));
+  });
+
   it('should PUT blog successfully', async () => {
     const blog = await blogsTestManager.createBlog({
       name: 'Blog Name',
@@ -131,45 +133,48 @@ describe('Blogs Positive (e2e)', () => {
 
     expect(getResponse.body).toEqual({ ...blog, name: newBody.name });
   });
-  //
-  // it('should GET blogs using sorting successfully', async () => {
-  //   const blogs = await blogsTestManager.createBlogs(5);
-  //
-  //   const response1 = await request(app.getHttpServer())
-  //     .get(
-  //       `${API_PREFIX}${API_PATH.BLOGS}/?sortBy=name&sortDirection=asc&searchNameTerm=tor`,
-  //     )
-  //     .expect(HttpStatus.OK);
-  //
-  //   expect(response1.body.items[0].name).toEqual(blogs[0].name);
-  //
-  //   const response2 = await request(app.getHttpServer())
-  //     .get(
-  //       `${API_PREFIX}${API_PATH.BLOGS}/?sortBy=name&sortDirection=desc&searchNameTerm=tor`,
-  //     )
-  //     .expect(HttpStatus.OK);
-  //
-  //   expect(response2.body.items[0].name).toEqual(blogs[blogs.length - 1].name);
-  // });
-  //
-  // it('should GET blogs using pagination successfully', async () => {
-  //   const blogs = await blogsTestManager.createBlogs(5);
-  //
-  //   const getResponse = await request(app.getHttpServer())
-  //     .get(
-  //       `${API_PREFIX}${API_PATH.BLOGS}/?pageSize=2&pageNumber=2&searchNameTerm=${blogs[0].name.slice(0, 3)}`,
-  //     )
-  //     .expect(HttpStatus.OK);
-  //   console.log(getResponse.body.items);
-  //   expect(getResponse.body).toEqual({
-  //     items: expect.any(Array),
-  //     totalCount: 5,
-  //     pagesCount: 3,
-  //     pageSize: 2,
-  //     page: 2,
-  //   });
-  //   expect(getResponse.body.items).toHaveLength(2);
-  // });
+
+  it('should GET blogs using sorting successfully', async () => {
+    const blogs = await blogsTestManager.createBlogs(5);
+
+    const response1 = await request(app.getHttpServer())
+      .get(
+        `${API_PREFIX}${API_PATH.BLOGS}/?sortBy=name&sortDirection=asc&searchNameTerm=tor`,
+      )
+      .set('authorization', basicAuthHeader)
+      .expect(HttpStatus.OK);
+
+    expect(response1.body.items[0].name).toEqual(blogs[0].name);
+
+    const response2 = await request(app.getHttpServer())
+      .get(
+        `${API_PREFIX}${API_PATH.BLOGS}/?sortBy=name&sortDirection=desc&searchNameTerm=tor`,
+      )
+      .set('authorization', basicAuthHeader)
+      .expect(HttpStatus.OK);
+
+    expect(response2.body.items[0].name).toEqual(blogs[blogs.length - 1].name);
+  });
+
+  it('should GET blogs using pagination successfully', async () => {
+    const blogs = await blogsTestManager.createBlogs(5);
+
+    const getResponse = await request(app.getHttpServer())
+      .get(
+        `${API_PREFIX}${API_PATH.BLOGS}/?pageSize=2&pageNumber=2&searchNameTerm=${blogs[0].name.slice(0, 3)}`,
+      )
+      .set('authorization', basicAuthHeader)
+      .expect(HttpStatus.OK);
+    // console.log(getResponse.body.items);
+    expect(getResponse.body).toEqual({
+      items: expect.any(Array),
+      totalCount: 5,
+      pagesCount: 3,
+      pageSize: 2,
+      page: 2,
+    });
+    expect(getResponse.body.items).toHaveLength(2);
+  });
   //
   // // it('should POST post for a certain blog', async () => {
   // //   const blog = await blogsTestManager.createBlog({

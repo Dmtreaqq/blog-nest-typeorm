@@ -1,17 +1,15 @@
 import { HttpStatus, INestApplication } from '@nestjs/common';
 import * as request from 'supertest';
-import { MongoMemoryServer } from 'mongodb-memory-server';
-import { API_PATH } from '../../../../src/common/constants';
-import { API_PREFIX } from '../../../../src/settings/global-prefix.setup';
-import { BlogsTestManager } from '../../../helpers/blogs-test-manager';
-import { ObjectId } from 'mongodb';
-import { createBlogInput } from '../../../helpers/inputs';
-import { basicAuthHeader } from '../../../helpers/users-test-manager';
-import { initSettings } from '../../../helpers/init-settings';
+import { API_PATH } from '../../../src/common/constants';
+import { API_PREFIX } from '../../../src/setup/global-prefix.setup';
+import { BlogsTestManager } from '../../helpers/blogs-test-manager';
+import { createBlogInput } from '../../helpers/inputs';
+import { basicAuthHeader } from '../../helpers/users-test-manager';
+import { initSettings } from '../../helpers/init-settings';
+import { randomUUID } from 'node:crypto';
 
 describe('Blogs Negative (e2e)', () => {
   let app: INestApplication;
-  let mongoServer: MongoMemoryServer;
   let blogsTestManager: BlogsTestManager;
   let randomId;
 
@@ -19,14 +17,13 @@ describe('Blogs Negative (e2e)', () => {
     const result = await initSettings();
     app = result.app;
     blogsTestManager = result.blogsTestManager;
-    randomId = new ObjectId();
+    randomId = randomUUID();
 
     await app.init();
   });
 
   afterAll(async () => {
     await app.close();
-    await mongoServer.stop();
   });
 
   beforeEach(async () => {
@@ -50,7 +47,7 @@ describe('Blogs Negative (e2e)', () => {
       errorsMessages: [
         {
           field: 'id',
-          message: 'id must be a mongodb id',
+          message: 'id must be a UUID',
         },
       ],
     });
@@ -66,7 +63,7 @@ describe('Blogs Negative (e2e)', () => {
       errorsMessages: [
         {
           field: 'id',
-          message: 'id must be a mongodb id',
+          message: 'id must be a UUID',
         },
       ],
     });
@@ -83,7 +80,7 @@ describe('Blogs Negative (e2e)', () => {
       errorsMessages: [
         {
           field: 'id',
-          message: 'id must be a mongodb id',
+          message: 'id must be a UUID',
         },
       ],
     });
@@ -268,7 +265,7 @@ describe('Blogs Negative (e2e)', () => {
   });
 
   it('should return 400 while GET posts for a not existing blog', async () => {
-    const objectId = new ObjectId();
+    const objectId = randomUUID();
 
     await request(app.getHttpServer())
       .get(`${API_PREFIX}${API_PATH.BLOGS}/${objectId}/posts`)
@@ -278,6 +275,7 @@ describe('Blogs Negative (e2e)', () => {
   it('should return 400 for GET blog sortBy as number', async () => {
     const response = await request(app.getHttpServer())
       .get(`${API_PREFIX}${API_PATH.BLOGS}/?sortBy=67`)
+      .set('authorization', basicAuthHeader)
       .expect(HttpStatus.BAD_REQUEST);
 
     expect(response.body).toEqual({

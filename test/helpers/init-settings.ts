@@ -8,6 +8,7 @@ import { UsersTestManager } from './users-test-manager';
 import * as cookieParser from 'cookie-parser';
 import { EmailService } from '../../src/features/communication/email.service';
 import { EmailServiceMock } from '../mock/email-service.mock';
+import { BlogsTestManager } from './blogs-test-manager';
 
 export const initSettings = async (
   //передаем callback, который получает ModuleBuilder, если хотим изменить настройку тестового модуля
@@ -36,7 +37,7 @@ export const initSettings = async (
 
   await app.init();
 
-  // const blogsTestManager = new BlogsTestManager(app);
+  const blogsTestManager = new BlogsTestManager(app);
   // const postsTestManager = new PostsTestManager(app);
   const usersTestManager = new UsersTestManager(app);
   // const commentsTestManager = new CommentsTestManager(app);
@@ -45,7 +46,7 @@ export const initSettings = async (
 
   return {
     app,
-    // blogsTestManager,
+    blogsTestManager,
     // postsTestManager,
     usersTestManager,
     // commentsTestManager,

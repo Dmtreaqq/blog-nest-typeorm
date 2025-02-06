@@ -1,4 +1,4 @@
-import { Controller, Get, Param, Query } from '@nestjs/common';
+import { Controller, Get, Param, Query, UseGuards } from '@nestjs/common';
 import { BlogsQueryRepository } from '../repositories/query/blogs-query.repository';
 import { IdInputDto } from '../../../common/dto/id.input-dto';
 import { BlogQueryGetParams } from './input-dto/get-blogs-query.dto';
@@ -8,8 +8,9 @@ import { PostQueryGetParams } from './input-dto/get-posts-query.dto';
 import { GetUser } from '../../../common/decorators/get-user.decorator';
 import { UserContext } from '../../../common/dto/user-context.dto';
 import { PostsQueryRepository } from '../repositories/query/posts-query.repository';
+import { JwtOptionalAuthGuard } from '../../../common/guards/jwt-optional-auth.guard';
 
-@Controller(['blogs', 'sa/blogs'])
+@Controller('blogs')
 export class BlogsController {
   constructor(
     private blogsQueryRepository: BlogsQueryRepository,
@@ -28,6 +29,7 @@ export class BlogsController {
     return this.blogsQueryRepository.findAllBlogs(query);
   }
 
+  @UseGuards(JwtOptionalAuthGuard)
   @Get(':id/posts')
   async getPostsForBlog(
     @Query() query: PostQueryGetParams,

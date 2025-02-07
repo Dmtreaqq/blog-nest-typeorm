@@ -18,6 +18,7 @@ import { UpdatePostUseCase } from './application/usecases/update-post.usecase';
 import { PostsController } from './api/posts.controller';
 import { CommentsRepository } from './repositories/comments.repository';
 import { CommentsQueryRepository } from './repositories/query/comments-query.repository';
+import { CreateCommentUseCase } from './application/usecases/create-comment.usecase';
 
 const useCases = [
   CreateBlogUseCase,
@@ -26,6 +27,7 @@ const useCases = [
   CreatePostUseCase,
   UpdatePostUseCase,
   DeletePostUseCase,
+  CreateCommentUseCase,
 ];
 
 @Module({

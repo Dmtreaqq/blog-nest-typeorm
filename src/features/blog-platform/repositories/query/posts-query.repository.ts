@@ -6,11 +6,13 @@ import { BasePaginationViewDto } from '../../../../common/dto/base-pagination.vi
 import { PostQueryGetParams } from '../../api/input-dto/get-posts-query.dto';
 import { Post } from '../../domain/post.entity';
 import { PostViewDto } from '../../api/view-dto/post.view-dto';
+import { Blog } from '../../domain/blog.entity';
 
 @Injectable()
 export class PostsQueryRepository {
   constructor(
     @InjectRepository(Post) private postsRepository: Repository<Post>,
+    @InjectRepository(Blog) private blogsRepository: Repository<Blog>,
   ) {}
 
   async findByIdOrThrow(id: string): Promise<PostViewDto> {
@@ -68,6 +70,12 @@ export class PostsQueryRepository {
     userId?: string,
   ): Promise<BasePaginationViewDto<PostViewDto[]>> {
     const { sortDirection, sortBy, pageSize, pageNumber } = query;
+
+    const blog = await this.blogsRepository.existsBy({ id: blogId });
+
+    if (!blog) {
+      throw new NotFoundException();
+    }
 
     const builder = this.postsRepository
       .createQueryBuilder('p')

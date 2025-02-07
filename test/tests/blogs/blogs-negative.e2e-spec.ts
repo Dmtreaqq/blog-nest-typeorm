@@ -40,7 +40,7 @@ describe('Blogs Negative (e2e)', () => {
 
   it('should return 400 for GET by id not correct ObjectId', async () => {
     const response = await request(app.getHttpServer())
-      .get(`${API_PREFIX}${API_PATH.BLOGS}/12345`)
+      .get(`${API_PREFIX}/blogs/12345`)
       .expect(HttpStatus.BAD_REQUEST);
 
     expect(response.body).toEqual({
@@ -264,11 +264,12 @@ describe('Blogs Negative (e2e)', () => {
       .expect(HttpStatus.UNAUTHORIZED);
   });
 
-  it('should return 400 while GET posts for a not existing blog', async () => {
-    const objectId = randomUUID();
+  it('should return 404 while GET posts for a not existing blog', async () => {
+    const randomId = randomUUID();
 
     await request(app.getHttpServer())
-      .get(`${API_PREFIX}${API_PATH.BLOGS}/${objectId}/posts`)
+      .get(`${API_PREFIX}${API_PATH.BLOGS}/${randomId}/posts`)
+      .set('authorization', basicAuthHeader)
       .expect(HttpStatus.NOT_FOUND);
   });
 

@@ -74,10 +74,12 @@ export class BlogsAdminController {
     @Param() params: IdInputDto,
     @GetUser() userContext: UserContext,
   ) {
+    console.log(params);
+    console.log(userContext);
     return this.postsQueryRepository.findAllPostsForBlog(
       query,
       params.id,
-      userContext.id,
+      userContext?.id,
     );
   }
 

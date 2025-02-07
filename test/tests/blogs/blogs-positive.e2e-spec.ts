@@ -40,6 +40,7 @@ describe('Blogs Positive (e2e)', () => {
   it('Should - get empty array when no blogs created', async () => {
     return request(app.getHttpServer())
       .get(API_PREFIX + API_PATH.BLOGS)
+      .set('authorization', basicAuthHeader)
       .expect(HttpStatus.OK)
       .then((response) => {
         expect(response.body).toEqual({
@@ -81,7 +82,7 @@ describe('Blogs Positive (e2e)', () => {
     });
 
     const getResponse = await request(app.getHttpServer())
-      .get(`${API_PREFIX + API_PATH.BLOGS}/${createdBlog.id}`)
+      .get(`${API_PREFIX + '/blogs'}/${createdBlog.id}`)
       .expect(HttpStatus.OK);
 
     expect(getResponse.body).toEqual(createdBlog);
@@ -128,7 +129,7 @@ describe('Blogs Positive (e2e)', () => {
       .expect(HttpStatus.NO_CONTENT);
 
     const getResponse = await request(app.getHttpServer())
-      .get(`${API_PREFIX}${API_PATH.BLOGS}/${blog.id}`)
+      .get(`${API_PREFIX}/blogs/${blog.id}`)
       .expect(HttpStatus.OK);
 
     expect(getResponse.body).toEqual({ ...blog, name: newBody.name });
@@ -175,52 +176,52 @@ describe('Blogs Positive (e2e)', () => {
     });
     expect(getResponse.body.items).toHaveLength(2);
   });
-  //
-  // // it('should POST post for a certain blog', async () => {
-  // //   const blog = await blogsTestManager.createBlog({
-  // //     name: 'Blog Name',
-  // //     description: 'Desc',
-  // //     websiteUrl: 'https://google.com',
-  // //   });
-  // //
-  // //   const response = await request(app.getHttpServer())
-  // //     .post(`${API_PREFIX}${API_PATH.BLOGS}/${blog.id}/posts`)
-  // //     .send({
-  // //       title: 'Post',
-  // //       shortDescription: 'desc',
-  // //       blogId: blog.id,
-  // //       content: 'post content',
-  // //     } as CreatePostInputDto)
-  // //     .set('authorization', basicAuthHeader)
-  // //     .expect(HttpStatus.CREATED);
-  // //
-  // //   expect(response.body).toEqual({
-  // //     title: 'Post',
-  // //     shortDescription: 'desc',
-  // //     blogId: blog.id,
-  // //     content: 'post content',
-  // //     id: expect.any(String),
-  // //     createdAt: expect.any(String),
-  // //     blogName: blog.name,
-  // //     extendedLikesInfo: expect.any(Object),
-  // //   });
-  // //
-  // //   const getResponse = await request(app.getHttpServer())
-  // //     .get(`${API_PREFIX}${API_PATH.POSTS}/${response.body.id}`)
-  // //     .expect(HttpStatus.OK);
-  // //
-  // //   expect(getResponse.body).toEqual({
-  // //     title: 'Post',
-  // //     shortDescription: 'desc',
-  // //     blogId: blog.id,
-  // //     content: 'post content',
-  // //     id: expect.any(String),
-  // //     createdAt: expect.any(String),
-  // //     blogName: blog.name,
-  // //     extendedLikesInfo: expect.any(Object),
-  // //   });
-  // // });
-  //
+
+  it('should POST post for a certain blog', async () => {
+    const blog = await blogsTestManager.createBlog({
+      name: 'Blog Name',
+      description: 'Desc',
+      websiteUrl: 'https://google.com',
+    });
+
+    const response = await request(app.getHttpServer())
+      .post(`${API_PREFIX}${API_PATH.BLOGS}/${blog.id}/posts`)
+      .send({
+        title: 'Post',
+        shortDescription: 'desc',
+        blogId: blog.id,
+        content: 'post content',
+      })
+      .set('authorization', basicAuthHeader)
+      .expect(HttpStatus.CREATED);
+
+    expect(response.body).toEqual({
+      title: 'Post',
+      shortDescription: 'desc',
+      blogId: blog.id,
+      content: 'post content',
+      id: expect.any(String),
+      createdAt: expect.any(String),
+      blogName: blog.name,
+      extendedLikesInfo: expect.any(Object),
+    });
+
+    const getResponse = await request(app.getHttpServer())
+      .get(`${API_PREFIX}${API_PATH.POSTS}/${response.body.id}`)
+      .expect(HttpStatus.OK);
+
+    expect(getResponse.body).toEqual({
+      title: 'Post',
+      shortDescription: 'desc',
+      blogId: blog.id,
+      content: 'post content',
+      id: expect.any(String),
+      createdAt: expect.any(String),
+      blogName: blog.name,
+      extendedLikesInfo: expect.any(Object),
+    });
+  });
+
   it('should DELETE blog successfully', async () => {
     const blog = await blogsTestManager.createBlog({
       name: 'name',

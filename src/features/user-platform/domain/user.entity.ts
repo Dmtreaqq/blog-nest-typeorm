@@ -11,6 +11,7 @@ import { randomUUID } from 'node:crypto';
 import { add } from 'date-fns/add';
 import { UserDeviceSession } from './user-device-session.entity';
 import { BaseTypeEntity } from '../../../common/domain/baseTypeEntity';
+import { Comment } from '../../blog-platform/domain/comment.entity';
 
 @Entity()
 export class User extends BaseTypeEntity {
@@ -25,6 +26,9 @@ export class User extends BaseTypeEntity {
 
   @Column({ type: 'varchar' })
   email: string;
+
+  @OneToMany(() => Comment, (comment) => comment.user)
+  comments: Comment[];
 
   @OneToOne(() => UserMetaInfo, (userMetaInfo) => userMetaInfo.user, {
     cascade: true,

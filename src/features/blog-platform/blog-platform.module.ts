@@ -2,6 +2,7 @@ import { Module } from '@nestjs/common';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { Blog } from './domain/blog.entity';
 import { Post } from './domain/post.entity';
+import { Comment } from './domain/comment.entity';
 import { CreateBlogUseCase } from './application/usecases/create-blog.usecase';
 import { BlogsRepository } from './repositories/blogs.repository';
 import { BlogsAdminController } from './api/blogs-admin.controller';
@@ -26,7 +27,7 @@ const useCases = [
 ];
 
 @Module({
-  imports: [TypeOrmModule.forFeature([Blog, Post])],
+  imports: [TypeOrmModule.forFeature([Blog, Post, Comment])],
   controllers: [BlogsController, BlogsAdminController, PostsController],
   providers: [
     PostsRepository,

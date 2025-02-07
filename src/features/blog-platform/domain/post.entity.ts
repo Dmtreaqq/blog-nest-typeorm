@@ -1,8 +1,15 @@
-import { Column, Entity, ManyToOne, PrimaryGeneratedColumn } from 'typeorm';
+import {
+  Column,
+  Entity,
+  ManyToOne,
+  OneToMany,
+  PrimaryGeneratedColumn,
+} from 'typeorm';
 import { BaseTypeEntity } from '../../../common/domain/baseTypeEntity';
 import { CreatePostDto } from '../dto/create-post.dto';
 import { Blog } from './blog.entity';
 import { UpdatePostDto } from '../dto/update-post.dto';
+import { Comment } from './comment.entity';
 
 @Entity()
 export class Post extends BaseTypeEntity {
@@ -26,6 +33,9 @@ export class Post extends BaseTypeEntity {
 
   @ManyToOne(() => Blog)
   blog: Blog;
+
+  @OneToMany(() => Comment, (comment) => comment.post)
+  comments: Comment[];
 
   static create(dto: CreatePostDto): Post {
     const post = new Post();

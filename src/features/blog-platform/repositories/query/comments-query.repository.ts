@@ -5,6 +5,7 @@ import { Repository } from 'typeorm';
 import { BasePaginationViewDto } from '../../../../common/dto/base-pagination.view-dto';
 import { CommentViewDto } from '../../api/view-dto/comment.view-dto';
 import { User } from '../../../user-platform/domain/user.entity';
+import { CommentsQueryGetParams } from '../../api/input-dto/get-comments-query.dto';
 
 @Injectable()
 export class CommentsQueryRepository {
@@ -31,35 +32,46 @@ export class CommentsQueryRepository {
     );
   }
 
-  // async findAllComments(
-  //   query: BlogQueryGetParams,
-  // ): Promise<BasePaginationViewDto<BlogViewDto[]>> {
-  //   const { searchNameTerm, sortDirection, sortBy, pageSize, pageNumber } =
-  //     query;
-  //
-  //   const builder = this.commentsRepository.createQueryBuilder('b');
-  //
-  //   if (searchNameTerm) {
-  //     builder.where(`b.name ILIKE '%${searchNameTerm}%'`);
-  //   }
-  //
-  //   const blogsCount = await builder.getCount();
-  //
-  //   builder
-  //     .orderBy(
-  //       `b.${sortBy}`,
-  //       `${sortDirection.toUpperCase() as 'ASC' | 'DESC'}`,
-  //     )
-  //     .limit(pageSize)
-  //     .offset(query.calculateSkip());
-  //
-  //   const blogs = await builder.getMany();
-  //
-  //   return BasePaginationViewDto.mapToView({
-  //     items: blogs.map(BlogViewDto.mapToView),
-  //     pageSize,
-  //     page: pageNumber,
-  //     totalCount: blogsCount,
-  //   });
-  // }
+  async findAllComments(
+    query: CommentsQueryGetParams,
+    postId: string,
+    userId?: string,
+  ): Promise<BasePaginationViewDto<CommentViewDto[]>> {
+    const { sortDirection, sortBy, pageSize, pageNumber } = query;
+
+    const builder = this.commentsRepository
+      .createQueryBuilder('c')
+      .leftJoinAndSelect('c.user', 'u')
+      .where('c.postId = :postId', { postId });
+
+    if (userId) {
+      // TODO
+    }
+
+    const commentsCount = await builder.getCount();
+
+    builder
+      .orderBy(
+        `c.${sortBy}`,
+        `${sortDirection.toUpperCase() as 'ASC' | 'DESC'}`,
+      )
+      .limit(pageSize)
+      .offset(query.calculateSkip());
+
+    const comments = await builder.getMany();
+
+    return BasePaginationViewDto.mapToView({
+      items: comments.map((comment) => {
+        return CommentViewDto.mapToView(
+          comment,
+          null,
+          { likesCount: 0, dislikesCount: 0 },
+          comment.user.login,
+        );
+      }),
+      pageSize,
+      page: pageNumber,
+      totalCount: commentsCount,
+    });
+  }
 }

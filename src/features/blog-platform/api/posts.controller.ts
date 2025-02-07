@@ -24,6 +24,7 @@ import { UserContext } from '../../../common/dto/user-context.dto';
 import { CreateCommentCommand } from '../application/usecases/create-comment.usecase';
 import { CommandBus } from '@nestjs/cqrs';
 import { CommentsQueryRepository } from '../repositories/query/comments-query.repository';
+import { CommentsQueryGetParams } from './input-dto/get-comments-query.dto';
 
 @Controller('posts')
 export class PostsController {
@@ -63,5 +64,19 @@ export class PostsController {
     );
 
     return this.commentsQueryRepository.findByIdOrThrow(commentId);
+  }
+
+  @UseGuards(JwtOptionalAuthGuard)
+  @Get(':id/comments')
+  async getCommentsForPost(
+    @Param() params: IdInputDto,
+    @Query() query: CommentsQueryGetParams,
+    @GetUser() userContext: UserContext,
+  ) {
+    return this.commentsQueryRepository.findAllComments(
+      query,
+      params.id,
+      userContext.id,
+    );
   }
 }

@@ -18,11 +18,12 @@ export class CommentsQueryRepository {
 
   async findByIdOrThrow(id: string): Promise<CommentViewDto> {
     const comment = await this.commentsRepository.findOneBy({ id });
-    const user = await this.usersRepository.findOneBy({ id: comment.userId });
 
     if (!comment) {
       throw new NotFoundException();
     }
+
+    const user = await this.usersRepository.findOneBy({ id: comment.userId });
 
     return CommentViewDto.mapToView(
       comment,

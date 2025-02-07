@@ -66,6 +66,10 @@ const useCases = [
     UserPlatformConfig,
     ...useCases,
   ],
-  exports: [UserPlatformConfig, TypeOrmModule.forFeature([User])],
+  exports: [
+    UserPlatformConfig,
+    TypeOrmModule.forFeature([User]),
+    UsersRepository,
+  ],
 })
 export class UserPlatformModule {}

@@ -11,7 +11,7 @@ export class CommentsQueryRepository {
   constructor(
     @InjectRepository(Comment)
     private commentsRepository: Repository<Comment>,
-    @InjectRepository(Comment)
+    @InjectRepository(User)
     private usersRepository: Repository<User>,
   ) {}
 

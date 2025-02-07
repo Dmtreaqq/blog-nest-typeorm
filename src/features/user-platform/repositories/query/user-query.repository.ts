@@ -9,11 +9,11 @@ import { BasePaginationViewDto } from '../../../../common/dto/base-pagination.vi
 @Injectable()
 export class UsersQueryRepository {
   constructor(
-    @InjectRepository(User) private userRepository: Repository<User>,
+    @InjectRepository(User) private usersRepository: Repository<User>,
   ) {}
 
   async findUserByIdOrThrow(id: string): Promise<UserViewDto> {
-    const user = await this.userRepository.findOne({
+    const user = await this.usersRepository.findOne({
       where: {
         id,
         deletedAt: null,
@@ -39,7 +39,7 @@ export class UsersQueryRepository {
       pageNumber,
     } = query;
 
-    const builder = this.userRepository.createQueryBuilder('u');
+    const builder = this.usersRepository.createQueryBuilder('u');
 
     if (searchEmailTerm) {
       builder.orWhere(`u.email ILIKE '%${searchEmailTerm}%'`);

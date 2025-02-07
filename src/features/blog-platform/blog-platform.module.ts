@@ -19,6 +19,7 @@ import { PostsController } from './api/posts.controller';
 import { CommentsRepository } from './repositories/comments.repository';
 import { CommentsQueryRepository } from './repositories/query/comments-query.repository';
 import { CreateCommentUseCase } from './application/usecases/create-comment.usecase';
+import { UserPlatformModule } from '../user-platform/user-platform.module';
 
 const useCases = [
   CreateBlogUseCase,
@@ -31,7 +32,10 @@ const useCases = [
 ];
 
 @Module({
-  imports: [TypeOrmModule.forFeature([Blog, Post, Comment])],
+  imports: [
+    TypeOrmModule.forFeature([Blog, Post, Comment]),
+    UserPlatformModule,
+  ],
   controllers: [BlogsController, BlogsAdminController, PostsController],
   providers: [
     PostsRepository,

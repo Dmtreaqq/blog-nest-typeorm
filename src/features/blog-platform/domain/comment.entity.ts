@@ -34,4 +34,8 @@ export class Comment extends BaseTypeEntity {
 
     return comment;
   }
+
+  updateContent(content: string) {
+    this.content = content;
+  }
 }

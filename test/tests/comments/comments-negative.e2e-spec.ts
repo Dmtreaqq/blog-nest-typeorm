@@ -1,25 +1,18 @@
-import { Test, TestingModule } from '@nestjs/testing';
 import { HttpStatus, INestApplication } from '@nestjs/common';
 import * as request from 'supertest';
-import { MongoMemoryServer } from 'mongodb-memory-server';
-import { MongooseModule } from '@nestjs/mongoose';
-import { API_PATH } from '../../../../src/common/constants';
-import { API_PREFIX } from '../../../../src/settings/global-prefix.setup';
-import { appSetup } from '../../../../src/settings/app.setup';
-import { BlogsTestManager } from '../../../helpers/blogs-test-manager';
-import { TestingModule as TestModule } from '../../../../src/features/testing/testing.module';
-import { CommonConfig } from '../../../../src/common/common.config';
-import { UsersTestManager } from '../../../helpers/users-test-manager';
-import { PostsTestManager } from '../../../helpers/posts-test-manager';
+import { API_PATH } from '../../../src/common/constants';
+import { API_PREFIX } from '../../../src/setup/global-prefix.setup';
+import { BlogsTestManager } from '../../helpers/blogs-test-manager';
+import { UsersTestManager } from '../../helpers/users-test-manager';
+import { PostsTestManager } from '../../helpers/posts-test-manager';
 import {
   createBlogInput,
   createPostInput,
   createUserInput,
-} from '../../../helpers/inputs';
-import { CommentViewDto } from '../../../../src/features/bloggers-platform/api/view-dto/comment.view-dto';
-import { CommentsTestManager } from '../../../helpers/comments-test-manager';
-import { ObjectId } from 'mongodb';
-import { initSettings } from '../../../helpers/init-settings';
+} from '../../helpers/inputs';
+import { CommentViewDto } from '../../../src/features/blog-platform/api/view-dto/comment.view-dto';
+import { CommentsTestManager } from '../../helpers/comments-test-manager';
+import { initSettings } from '../../helpers/init-settings';
 import { randomUUID } from 'node:crypto';
 
 const commentEntity: CommentViewDto = {
@@ -39,7 +32,6 @@ const commentEntity: CommentViewDto = {
 
 describe('Comments Negative (e2e)', () => {
   let app: INestApplication;
-  let mongoServer: MongoMemoryServer;
   let blogsTestManager: BlogsTestManager;
   let postsTestManager: PostsTestManager;
   let usersTestManager: UsersTestManager;
@@ -58,7 +50,6 @@ describe('Comments Negative (e2e)', () => {
 
   afterAll(async () => {
     await app.close();
-    await mongoServer.stop();
   });
 
   beforeEach(async () => {

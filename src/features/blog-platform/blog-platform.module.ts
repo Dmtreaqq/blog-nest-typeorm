@@ -16,6 +16,8 @@ import { PostsQueryRepository } from './repositories/query/posts-query.repositor
 import { DeletePostUseCase } from './application/usecases/delete-post.usecase';
 import { UpdatePostUseCase } from './application/usecases/update-post.usecase';
 import { PostsController } from './api/posts.controller';
+import { CommentsRepository } from './repositories/comments.repository';
+import { CommentsQueryRepository } from './repositories/query/comments-query.repository';
 
 const useCases = [
   CreateBlogUseCase,
@@ -34,6 +36,8 @@ const useCases = [
     PostsQueryRepository,
     BlogsRepository,
     BlogsQueryRepository,
+    CommentsRepository,
+    CommentsQueryRepository,
     ...useCases,
   ],
 })
